@@ -1,11 +1,10 @@
 services:
   - type: web
     name: jd-solutions-backend
-    runtime: java
-    rootDir: backend/demo
+    runtime: docker
     plan: free
-    buildCommand: ./mvnw clean package -DskipTests
-    startCommand: java -jar target/demo-0.0.1-SNAPSHOT.jar
+    dockerfilePath: ./backend/demo/Dockerfile
+    dockerContext: ./backend/demo
     healthCheckPath: /api/health
     envVars:
       - key: DB_HOST

@@ -12,7 +12,7 @@ The backend in `backend/demo` is prepared for Render.
 5. Continue and create the services
 
 Render will create:
-- one Java web service: `jd-solutions-backend`
+- one Docker-based web service: `jd-solutions-backend`
 - one Postgres database: `jd-solutions-db`
 
 ## 2. Fill required environment values in Render
