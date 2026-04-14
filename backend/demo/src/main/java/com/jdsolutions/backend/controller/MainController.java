@@ -11,10 +11,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = {
-    "http://localhost:3000",
-    "https://jdsolutions5049-cpu.github.io"
-})
 public class MainController {
 
     @Autowired
@@ -33,6 +29,11 @@ public class MainController {
     private PasswordEncoder passwordEncoder; 
 
     // --- PUBLIC ROUTES (FOR USERS) ---
+
+    @GetMapping("/health")
+    public String healthCheck() {
+        return "OK";
+    }
 
     @PostMapping("/contact")
     public String saveContact(@RequestBody Contact contact) {
