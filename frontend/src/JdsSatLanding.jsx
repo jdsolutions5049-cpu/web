@@ -235,7 +235,7 @@ const JdsSatLanding = () => {
           <input name="city" placeholder="City" className="form-input" value={form.city} onChange={(e) => setField('city', e.target.value)} />
           <input name="state" placeholder="State" className="form-input" value={form.state} onChange={(e) => setField('state', e.target.value)} />
           <input name="resume" placeholder="Resume Link (Optional)" className="form-input" value={form.resume} onChange={(e) => setField('resume', e.target.value)} />
-          <button type="submit" className="btn btn-primary">Submit Registration</button>
+          <button type="submit" className="btn btn-primary" style={{ color: '#000' }}>Submit Registration</button>
         </form>
       </section>
 
