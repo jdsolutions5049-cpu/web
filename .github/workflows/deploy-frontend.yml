@@ -35,6 +35,8 @@ jobs:
       - name: Build frontend
         run: npm run build
         working-directory: frontend
+        env:
+          REACT_APP_API_BASE_URL: https://jd-solutions-backend-riwi.onrender.com
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
