@@ -1,13 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
+import './theme.css';
+import { FlasherProvider } from './Flasher';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <FlasherProvider>
+      <div className="site-wide">
+        <App />
+      </div>
+    </FlasherProvider>
   </React.StrictMode>
 );
 

@@ -7,15 +7,18 @@ import Services from "./Services";
 import Internship from "./Internship";
 import AboutUs from "./AboutUs";
 import CorporateTraining from "./CorporateTraining";
+import CourseMode from "./CourseMode";
 import EnquiryForm from "./EnquiryForm";
 import ContactUs from "./ContactUs";
 import Footer from "./Footer";
-import AdminDashboard from "./AdminDashboard"; 
+import AdminDashboard from "./AdminDashboard";
+import JdsSatLanding from "./JdsSatLanding";
 
 const sectionRoutes = {
   "/": "home",
   "/services": "services",
   "/internships": "internship",
+  "/courses": "course-mode",
   "/about-us": "about",
   "/contact-us": "contact",
 };
@@ -27,7 +30,9 @@ function HomePage() {
     const sectionId = sectionRoutes[location.pathname] || "home";
     const element = document.getElementById(sectionId);
     if (element) {
-      element.scrollIntoView({ behavior: "smooth", block: "start" });
+      setTimeout(() => {
+        element.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 100);
     }
   }, [location.pathname]);
 
@@ -38,22 +43,25 @@ function HomePage() {
         <section id="home">
           <Hero />
         </section>
-        <section id="services" className="py-10">
+        <section id="services">
           <Services />
         </section>
-        <section id="internship" className="py-10">
+        <section id="internship">
           <Internship />
         </section>
-        <section id="about" className="py-10">
+        <section id="about">
           <AboutUs />
         </section>
-        <section id="corporate" className="py-10">
+        <section id="corporate">
           <CorporateTraining />
         </section>
-        <section id="enquiry" className="py-10">
+        <section id="course-mode">
+          <CourseMode />
+        </section>
+        <section id="enquiry">
           <EnquiryForm />
         </section>
-        <section id="contact" className="py-10">
+        <section id="contact">
           <ContactUs />
         </section>
       </main>
@@ -65,14 +73,16 @@ function HomePage() {
 function App() {
   return (
     <Router>
-      <div className="App bg-white">
+      <div className="App">
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/services" element={<HomePage />} />
           <Route path="/internships" element={<HomePage />} />
+          <Route path="/courses" element={<HomePage />} />
           <Route path="/about-us" element={<HomePage />} />
           <Route path="/contact-us" element={<HomePage />} />
           <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/jds-sat" element={<JdsSatLanding />} />
         </Routes>
       </div>
     </Router>

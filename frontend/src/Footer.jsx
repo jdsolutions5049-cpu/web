@@ -1,107 +1,109 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Footer = () => {
+  const navigate = useNavigate();
   const assetBase = process.env.PUBLIC_URL || "";
   const homeHashLink = `${assetBase}/#/`;
   const sectionHashLink = (sectionId) => `${assetBase}/#/#${sectionId}`;
 
-  const footerLinkStyle =
-    "hover:text-[#0059B2] transition-colors duration-300 cursor-pointer";
+  const goToSat = (e) => {
+    if (e) e.preventDefault();
+    navigate('/jds-sat');
+  };
 
   return (
-    <footer className="bg-white text-gray-600 py-16 px-6 md:px-16 border-t border-blue-100">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
-        <div className="col-span-1">
-          <div className="flex items-center gap-2 mb-6">
-            <div className="h-10 w-10 overflow-hidden rounded shadow-sm border border-gray-50">
+    <footer className="site-footer">
+      <div className="footer-inner">
+        <div className="footer-brand-block">
+          <h2>
+            <div className="footer-brand-logo">
               <img
                 src={`${assetBase}/jd-logo.jpeg`}
-                alt="Jay Dynamic Solutions Logo"
-                className="object-contain w-full h-full"
+                alt="Jay Dynamic Solutions pvt Logo"
               />
             </div>
-            <h2 className="text-xl font-bold text-[#0059B2] tracking-tight">
-              Jay Dynamic Solutions
-            </h2>
-          </div>
-          <p className="text-sm leading-relaxed text-gray-500">
+            Jay Dynamic Solutions pvt
+          </h2>
+          <p>
             Empowering Technology through Quality Education and Innovative IT
             Solutions. Leading the way in software excellence.
           </p>
+          <a
+            href="#/jds-sat"
+            onClick={goToSat}
+            className="footer-sat-promo"
+          >
+            <span className="footer-sat-icon">🏆</span>
+            <span>
+              <strong>JDS-SAT 2026</strong>
+              <small>India's Biggest Scholarship Test • Up to 100% OFF</small>
+            </span>
+            <span className="footer-sat-arrow">→</span>
+          </a>
         </div>
 
-        <div>
-          <h3 className="text-[#0059B2] font-bold mb-6 uppercase text-xs tracking-widest">
-            Quick Links
-          </h3>
-          <ul className="space-y-3 text-sm font-medium">
+        <div className="footer-col">
+          <h3>Quick Links</h3>
+          <ul className="footer-links">
             <li>
-              <a href={homeHashLink} className={footerLinkStyle}>
-                Home
-              </a>
+              <a href={homeHashLink}>Home</a>
             </li>
             <li>
-              <a href={sectionHashLink("services")} className={footerLinkStyle}>
-                Services
-              </a>
+              <a href={sectionHashLink("services")}>Services</a>
             </li>
             <li>
-              <a href={sectionHashLink("internship")} className={footerLinkStyle}>
-                Internships
-              </a>
+              <a href={sectionHashLink("internship")}>Internships</a>
             </li>
             <li>
-              <a href={sectionHashLink("about")} className={footerLinkStyle}>
-                About Us
-              </a>
+              <a href={sectionHashLink("about")}>About Us</a>
+            </li>
+            <li>
+              <a href="#/jds-sat" onClick={goToSat} style={{ color: 'var(--primary)' }}>🏆 Scholarship Test</a>
             </li>
           </ul>
         </div>
 
-        <div>
-          <h3 className="text-[#0059B2] font-bold mb-6 uppercase text-xs tracking-widest">
-            Expertise
-          </h3>
-          <ul className="space-y-3 text-sm text-gray-500">
-            <li className="hover:text-gray-800 transition-colors">
-              Web & Mobile App
-            </li>
-            <li className="hover:text-gray-800 transition-colors">
-              Machine Learning
-            </li>
-            <li className="hover:text-gray-800 transition-colors">
-              Corporate Training
-            </li>
-            <li className="hover:text-gray-800 transition-colors">Data Science</li>
+        <div className="footer-col">
+          <h3>Expertise</h3>
+          <ul className="footer-expertise-list">
+            <li>Web & Mobile App</li>
+            <li>Machine Learning</li>
+            <li>Corporate Training</li>
+            <li>Data Science</li>
           </ul>
         </div>
 
-        <div>
-          <h3 className="text-[#0059B2] font-bold mb-6 uppercase text-xs tracking-widest">
-            Get In Touch
-          </h3>
-          <p className="text-sm mb-4 italic text-gray-500">
+        <div className="footer-col footer-contact-col">
+          <h3>Get In Touch</h3>
+          <p>
             Directed by Jay Deshmukh & Abhishek Bharti
+          </p>
+          <p>
+            Phone: +91 83080 35049
+          </p>
+          <p className="footer-address">
+            Jay Dynamic Solutions Pvt. Ltd.<br />
+            Shop No. 113, 1st Floor, Rainbow Crossroad,<br />
+            Behind McDonald's, Bakori Phata, Wagholi, Pune.
           </p>
           <a
             href={sectionHashLink("enquiry")}
-            className="inline-block bg-[#0059B2] text-white px-6 py-2.5 rounded-lg font-bold text-sm shadow-md hover:bg-[#002E5D] transition-all transform hover:-translate-y-1"
+            className="footer-cta-btn"
           >
-            Enquire Now
+            Enquire Now →
           </a>
         </div>
       </div>
 
-      <div className="mt-16 pt-8 border-t border-blue-50 flex flex-col items-center">
-        <p className="text-[10px] text-gray-400 uppercase tracking-[0.2em] mb-3">
-          Copyright {new Date().getFullYear()} Jay Dynamic Solutions. All rights
-          reserved.
+      <div className="footer-bottom">
+        <p className="footer-copyright">
+          Copyright {new Date().getFullYear()} Jay Dynamic Solutions pvt. All rights reserved.
         </p>
 
         <Link
           to="/admin"
-          className="text-[9px] uppercase tracking-[0.3em] text-gray-300 hover:text-[#0059B2] font-bold transition-all"
+          className="footer-admin-link"
         >
           System Management Login
         </Link>
