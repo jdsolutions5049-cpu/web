@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from 'react';
 
-const Countdown = ({ target = '2026-09-30T00:00:00' }) => {
-  const [left, setLeft] = useState(getLeft());
+const getTimeLeft = (target) => {
+  const now = new Date();
+  const t = new Date(target) - now;
+  if (t <= 0) return { d: 0, h: 0, m: 0, s: 0 };
+  const s = Math.floor((t / 1000) % 60);
+  const m = Math.floor((t / 1000 / 60) % 60);
+  const h = Math.floor((t / 1000 / 60 / 60) % 24);
+  const d = Math.floor(t / 1000 / 60 / 60 / 24);
+  return { d, h, m, s };
+};
 
-  function getLeft() {
-    const now = new Date();
-    const t = new Date(target) - now;
-    if (t <= 0) return { d:0,h:0,m:0,s:0 };
-    const s = Math.floor((t/1000)%60);
-    const m = Math.floor((t/1000/60)%60);
-    const h = Math.floor((t/1000/60/60)%24);
-    const d = Math.floor(t/1000/60/60/24);
-    return { d,h,m,s };
-  }
+const Countdown = ({ target = '2026-09-30T00:00:00' }) => {
+  const [left, setLeft] = useState(() => getTimeLeft(target));
 
   useEffect(() => {
-    const id = setInterval(()=> setLeft(getLeft()),1000);
+    const id = setInterval(() => setLeft(getTimeLeft(target)), 1000);
     return ()=> clearInterval(id);
-  },[]);
+  }, [target]);
 
   return (
     <div className="countdown">
