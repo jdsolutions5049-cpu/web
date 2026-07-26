@@ -35,8 +35,6 @@ jobs:
       - name: Build frontend
         run: npm run build
         working-directory: frontend
-        env:
-          PUBLIC_URL: /web
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
