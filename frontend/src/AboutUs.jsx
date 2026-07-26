@@ -6,10 +6,10 @@ const AboutUs = () => {
     <div style={{background: '#fff'}}>
       <div className="about-header-section">
         <div className="about-header-inner">
-          <h1>About Jay Dynamic Solutions pvt</h1>
+          <h1>About Jay Dynamic Solutions Pvt.Ltd</h1>
           <div className="about-divider"></div>
           <p>
-            Jay Dynamic Solutions pvt is a technology learning platform dedicated to helping students build real-world skills through industry-oriented internships.
+            Jay Dynamic Solutions Pvt.Ltd is a technology learning platform dedicated to helping students build real-world skills through industry-oriented internships.
           </p>
         </div>
       </div>

@@ -20,4 +20,9 @@
     <loc>https://www.jdsolutionss.com/#/contact-us</loc>
     <priority>0.7</priority>
   </url>
+  <url>
+    <loc>https://www.jdsolutionss.com/#/jds-sat</loc>
+    <priority>1.0</priority>
+    <changefreq>weekly</changefreq>
+  </url>
 </urlset>

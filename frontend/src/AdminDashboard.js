@@ -57,6 +57,23 @@ const AdminDashboard = () => {
         }
     };
 
+    const handleDelete = async (item) => {
+        const recordName = item.fullName || item.name || 'this record';
+        if (!window.confirm(`Delete ${recordName}? This action cannot be undone.`)) return;
+        const collection = view === 'contacts' ? 'contacts' : 'enquiries';
+        try {
+            const response = await fetch(buildApiUrl(`/api/admin/${collection}/${item._id}`), { method: 'DELETE' });
+            if (!response.ok) throw new Error(await response.text());
+            setData((current) => ({
+                ...current,
+                [collection]: current[collection].filter((record) => record._id !== item._id)
+            }));
+            flashMsg('success', 'Deleted', `${recordName} was deleted successfully`);
+        } catch (error) {
+            flashMsg('error', 'Delete Failed', error.message || 'Unable to delete record');
+        }
+    };
+
     const formatDate = (dateStr) => {
         if (!dateStr) return '-';
         const d = new Date(dateStr);
@@ -137,7 +154,7 @@ const AdminDashboard = () => {
                         color: '#0a1a2f',
                         marginBottom: '6px',
                         fontWeight: 800
-                    }}>JD Solutions pvt</h2>
+                    }}>JD Solutions Pvt.Ltd</h2>
                     <p style={{ color: '#6c757d', fontSize: '14px', marginBottom: '32px', letterSpacing: '1px' }}>ADMIN PORTAL</p>
                     <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
                         <input
@@ -244,7 +261,7 @@ const AdminDashboard = () => {
                         <div style={{
                             fontFamily: "'Playfair Display', serif",
                             fontSize: '18px', fontWeight: 800, lineHeight: 1.1
-                        }}>Jay Dynamic pvt</div>
+                        }}>Jay Dynamic Solutions Pvt.Ltd</div>
                         <div style={{ fontSize: '10px', color: '#fd5f00', letterSpacing: '2px', marginTop: '2px', fontWeight: 700 }}>ADMIN</div>
                     </div>
                 </div>
@@ -564,12 +581,20 @@ const AdminDashboard = () => {
                                         letterSpacing: '1.5px',
                                         textTransform: 'uppercase'
                                     }}>Submitted</th>
+                                    <th style={{
+                                        padding: '18px 24px',
+                                        textAlign: 'left',
+                                        fontSize: '12px',
+                                        fontWeight: 800,
+                                        letterSpacing: '1.5px',
+                                        textTransform: 'uppercase'
+                                    }}>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {currentData.length === 0 ? (
                                     <tr>
-                                        <td colSpan={view === 'contacts' ? 5 : view === 'sat' ? 8 : 7} style={{
+                                        <td colSpan={view === 'contacts' ? 6 : view === 'sat' ? 9 : 8} style={{
                                             padding: '80px 24px',
                                             textAlign: 'center'
                                         }}>
@@ -628,6 +653,21 @@ const AdminDashboard = () => {
                                                     }}>{item.fullName || item.name}</div>
                                                 </div>
                                             </div>
+                                        </td>
+                                        <td style={{ padding: '20px 24px' }}>
+                                            <button
+                                                type="button"
+                                                onClick={() => handleDelete(item)}
+                                                style={{
+                                                    border: '1px solid rgba(220,53,69,0.25)',
+                                                    background: 'rgba(220,53,69,0.08)',
+                                                    color: '#dc3545',
+                                                    borderRadius: '8px',
+                                                    padding: '8px 12px',
+                                                    fontWeight: 700,
+                                                    cursor: 'pointer'
+                                                }}
+                                            >Delete</button>
                                         </td>
                                         <td style={{ padding: '20px 24px' }}>
                                             <div style={{ color: '#004db3', fontWeight: 600, fontSize: '14px', marginBottom: '4px' }}>

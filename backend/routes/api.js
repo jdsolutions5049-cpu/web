@@ -62,4 +62,26 @@ router.get('/admin/contacts', async (req, res) => {
   }
 });
 
+router.delete('/admin/enquiries/:id', async (req, res) => {
+  try {
+    const deleted = await Enquiry.findByIdAndDelete(req.params.id);
+    if (!deleted) return res.status(404).send('Enquiry not found.');
+    res.send('Enquiry deleted.');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Unable to delete enquiry.');
+  }
+});
+
+router.delete('/admin/contacts/:id', async (req, res) => {
+  try {
+    const deleted = await Contact.findByIdAndDelete(req.params.id);
+    if (!deleted) return res.status(404).send('Contact not found.');
+    res.send('Contact deleted.');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Unable to delete contact.');
+  }
+});
+
 module.exports = router;

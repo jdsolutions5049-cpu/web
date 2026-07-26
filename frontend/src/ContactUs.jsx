@@ -9,7 +9,7 @@ const ContactUs = () => {
     e.preventDefault();
     try {
       await axios.post(buildApiUrl('/api/contact'), formData);
-      alert("Message Sent! Jay Dynamic Solutions pvt will contact you soon.");
+      alert("Message Sent! Jay Dynamic Solutions Pvt.Ltd will contact you soon.");
       setFormData({ name: '', email: '', message: '' });
     } catch (err) {
       alert("Unable to send message right now. Please try again later.");
@@ -46,7 +46,7 @@ const ContactUs = () => {
               <div className="contact-item-icon"><i className="bi bi-envelope-fill"></i></div>
               <div>
                 <div className="contact-item-label">Email Us</div>
-                <div className="contact-item-value">jdsolutions5049@gmail.com</div>
+                <div className="contact-item-value">Info@jdsolutionss.com</div>
               </div>
             </div>
             <div className="contact-item">

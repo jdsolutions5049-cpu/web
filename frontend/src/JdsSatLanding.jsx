@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { buildApiUrl } from './api';
 import Countdown from './Countdown';
 import FAQ from './FAQ';
@@ -60,7 +60,7 @@ const timeline = [
 ];
 
 const faqItems = [
-  { q: 'Is the test free?', a: 'The final test fee policy will be announced by Jay Dynamic Solutions Pvt. Ltd. before registration closes.' },
+  { q: 'Is the test free?', a: 'The final test fee policy will be announced by Jay Dynamic Solutions Pvt.Ltd before registration closes.' },
   { q: 'Is scholarship guaranteed?', a: 'Scholarship is awarded based on performance and the announced criteria.' },
   { q: 'Is internship guaranteed?', a: 'Internship opportunities may be available for eligible students based on performance and program requirements.' },
   { q: 'Can I choose any course?', a: 'Yes, scholarship can be applied to eligible courses as per the announced terms.' },
@@ -83,6 +83,21 @@ const initialForm = {
 const JdsSatLanding = () => {
   const flasher = useFlasher();
   const [form, setForm] = useState(initialForm);
+
+  useEffect(() => {
+    document.title = 'JDSAT (JD SAT) Scholarship Aptitude Test 2026 | Jay Dynamic Solutions';
+    const description = 'Register for JDSAT, also searched as JD SAT, JDS SAT, or JDSSAT, and compete for scholarships on industry-oriented IT courses.';
+    let descriptionTag = document.querySelector('meta[name="description"]');
+    if (!descriptionTag) {
+      descriptionTag = document.createElement('meta');
+      descriptionTag.name = 'description';
+      document.head.appendChild(descriptionTag);
+    }
+    descriptionTag.setAttribute('content', description);
+    return () => {
+      document.title = 'Jay Dynamic Solutions Pvt.Ltd | Internships & IT Services in Pune';
+    };
+  }, []);
 
   const handleRegister = () => {
     const el = document.getElementById('jds-register');
@@ -160,7 +175,7 @@ const JdsSatLanding = () => {
         <div className="sat-header-left">
           <h1>Jay Dynamic Solutions Scholarship Aptitude Test (JDS-SAT) 2026</h1>
           <p className="sat-lead">Take One Aptitude Test & Earn Scholarship on Industry-Oriented IT Courses</p>
-          <p className="sat-desc">Unlock your career with merit-based scholarships on professional IT courses offered by Jay Dynamic Solutions Pvt. Ltd. Show your skills, secure your scholarship, and begin your journey toward becoming industry-ready.</p>
+          <p className="sat-desc">Unlock your career with merit-based scholarships on professional IT courses offered by Jay Dynamic Solutions Pvt.Ltd. Show your skills, secure your scholarship, and begin your journey toward becoming industry-ready.</p>
           <div className="sat-cta-row">
             <button onClick={handleRegister} className="btn btn-primary">Register Now</button>
             <a href="#courses" className="btn btn-ghost">Explore Courses</a>
@@ -231,13 +246,13 @@ const JdsSatLanding = () => {
           <div className="section-divider"></div>
         </div>
         <ul className="sat-structure-list">
-          <li><strong>Top Rank</strong><span>100% Scholarship</span></li>
-          <li><strong>Rank 2-10</strong><span>75% Scholarship</span></li>
-          <li><strong>Rank 11-25</strong><span>50% Scholarship</span></li>
-          <li><strong>Rank 26-50</strong><span>30% Scholarship</span></li>
-          <li><strong>Participation</strong><span>Special Scholarship</span></li>
+          <li><strong>Top 10 Students</strong><span>100% Scholarship</span></li>
+          <li><strong>Rank 11-25</strong><span>75% Scholarship</span></li>
+          <li><strong>Rank 26-50</strong><span>50% Scholarship</span></li>
+          <li><strong>Rank 51-100</strong><span>30% Scholarship</span></li>
+          <li><strong>All Participants</strong><span>Special Scholarships / Course Discount</span></li>
         </ul>
-        <p className="sat-note">Final scholarship criteria will be announced by Jay Dynamic Solutions Pvt. Ltd.</p>
+        <p className="sat-note">Final scholarship criteria will be announced by Jay Dynamic Solutions Pvt.Ltd.</p>
       </section>
 
       <section className="sat-section" id="courses">
@@ -379,9 +394,9 @@ const JdsSatLanding = () => {
         </div>
         <div className="sat-contact-grid">
           <div><i className="bi bi-telephone"></i><span>Phone: +91 83080 35049</span></div>
-          <div><i className="bi bi-envelope"></i><span>Email: jdsolutions5049@gmail.com</span></div>
+          <div><i className="bi bi-envelope"></i><span>Email: Info@jdsolutionss.com</span></div>
           <div><i className="bi bi-globe2"></i><span>Website: www.jdsolutionss.com</span></div>
-          <div><i className="bi bi-geo-alt"></i><span>Jay Dynamic Solutions Pvt. Ltd., Shop No. 113, 1st Floor, Rainbow Crossroad, Behind McDonald's, Bakori Phata, Wagholi, Pune.</span></div>
+          <div><i className="bi bi-geo-alt"></i><span>Jay Dynamic Solutions Pvt.Ltd, Shop No. 113, 1st Floor, Rainbow Crossroad, Behind McDonald's, Bakori Phata, Wagholi, Pune.</span></div>
           <div><i className="bi bi-instagram"></i><a href="https://www.instagram.com/jd_solutions_pvt_ltd/" target="_blank" rel="noreferrer">Instagram</a></div>
           <div><i className="bi bi-linkedin"></i><a href="https://www.linkedin.com/company/jd-solution-pune/" target="_blank" rel="noreferrer">LinkedIn</a></div>
         </div>
@@ -395,7 +410,7 @@ const JdsSatLanding = () => {
           <span>Refund Policy</span>
           <span>Contact</span>
         </div>
-        <div>Copyright &copy; Jay Dynamic Solutions Pvt. Ltd.</div>
+        <div>Copyright &copy; Jay Dynamic Solutions Pvt.Ltd.</div>
       </footer>
     </div>
   );

@@ -19,11 +19,11 @@ const Footer = () => {
           <h2>
             <div className="footer-brand-logo">
               <img
-                src={`${assetBase}/jd-logo.jpeg`}
-                alt="Jay Dynamic Solutions pvt Logo"
+                src={`${assetBase}/logo.jpeg`}
+                alt="Jay Dynamic Solutions Pvt.Ltd Logo"
               />
             </div>
-            Jay Dynamic Solutions pvt
+            Jay Dynamic Solutions Pvt.Ltd
           </h2>
           <p>
             Empowering Technology through Quality Education and Innovative IT
@@ -83,7 +83,7 @@ const Footer = () => {
             Phone: +91 83080 35049
           </p>
           <p className="footer-address">
-            Jay Dynamic Solutions Pvt. Ltd.<br />
+            Jay Dynamic Solutions Pvt.Ltd<br />
             Shop No. 113, 1st Floor, Rainbow Crossroad,<br />
             Behind McDonald's, Bakori Phata, Wagholi, Pune.
           </p>
@@ -98,7 +98,7 @@ const Footer = () => {
 
       <div className="footer-bottom">
         <p className="footer-copyright">
-          Copyright {new Date().getFullYear()} Jay Dynamic Solutions pvt. All rights reserved.
+          Copyright {new Date().getFullYear()} Jay Dynamic Solutions Pvt.Ltd. All rights reserved.
         </p>
 
         <Link

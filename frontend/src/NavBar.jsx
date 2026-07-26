@@ -40,10 +40,10 @@ const NavBar = () => {
     <nav className="site-nav">
       <div className="brand">
         <div className="brand-logo">
-          <img src={`${assetBase}/jd-logo.jpeg`} alt="Jay Dynamic Solutions pvt Logo" />
+          <img src={`${assetBase}/logo.jpeg`} alt="Jay Dynamic Solutions Pvt.Ltd Logo" />
         </div>
         <div>
-          <div className="title">Jay Dynamic Solutions pvt</div>
+          <div className="title">Jay Dynamic Solutions Pvt.Ltd</div>
           <div className="subtitle">INTERN & IT SERVICES</div>
         </div>
       </div>

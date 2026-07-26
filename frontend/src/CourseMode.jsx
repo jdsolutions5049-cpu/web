@@ -68,7 +68,7 @@ const CourseMode = () => {
         </article>
         <article className="course-mode-card offline">
           <div className="course-mode-icon"><i className="bi bi-building-fill"></i></div>
-          <div><span className="course-mode-label">COURSE MODE</span><h3>Offline</h3><p>Jay Dynamic Solutions Pvt. Ltd.<br />Shop No. 113, 1st Floor, Rainbow Crossroad,<br />Behind McDonald's, Bakori Phata, Wagholi, Pune.</p></div>
+          <div><span className="course-mode-label">COURSE MODE</span><h3>Offline</h3><p>Jay Dynamic Solutions Pvt.Ltd<br />Shop No. 113, 1st Floor, Rainbow Crossroad,<br />Behind McDonald's, Bakori Phata, Wagholi, Pune.</p></div>
         </article>
       </div>
     </section>
