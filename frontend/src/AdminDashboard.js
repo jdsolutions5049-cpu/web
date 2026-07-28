@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { buildApiUrl } from './api';
+import { buildApiUrl, fetchWithTimeout } from './api';
 
 const AdminDashboard = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -18,7 +18,7 @@ const AdminDashboard = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            const response = await fetch(buildApiUrl("/api/admin/login"), {
+            const response = await fetchWithTimeout(buildApiUrl("/api/admin/login"), {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(credentials)
@@ -42,8 +42,8 @@ const AdminDashboard = () => {
         setLoading(true);
         try {
             const [enqRes, conRes] = await Promise.all([
-                fetch(buildApiUrl("/api/admin/enquiries")),
-                fetch(buildApiUrl("/api/admin/contacts"))
+                fetchWithTimeout(buildApiUrl("/api/admin/enquiries")),
+                fetchWithTimeout(buildApiUrl("/api/admin/contacts"))
             ]);
             setData({
                 enquiries: await enqRes.json(),

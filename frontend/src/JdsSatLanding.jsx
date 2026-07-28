@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { buildApiUrl } from './api';
+import { buildApiUrl, fetchWithTimeout } from './api';
 import Countdown from './Countdown';
 import FAQ from './FAQ';
 import { useFlasher } from './Flasher';
@@ -155,7 +155,7 @@ const JdsSatLanding = () => {
         state: form.state,
         resume: form.resume
       };
-      const res = await fetch(buildApiUrl('/api/enquiry'), {
+      const res = await fetchWithTimeout(buildApiUrl('/api/enquiry'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
