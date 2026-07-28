@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { buildApiUrl } from './api';
 import Countdown from './Countdown';
 import FAQ from './FAQ';
@@ -83,6 +83,8 @@ const initialForm = {
 const JdsSatLanding = () => {
   const flasher = useFlasher();
   const [form, setForm] = useState(initialForm);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const submissionLock = useRef(false);
 
   useEffect(() => {
     document.title = 'JDSAT (JD SAT) Scholarship Aptitude Test 2026 | Jay Dynamic Solutions';
@@ -127,6 +129,16 @@ const JdsSatLanding = () => {
       return;
     }
 
+    if (submissionLock.current) {
+      const message = 'Your registration is already being submitted. Please wait.';
+      if (flasher) flasher.flash('info', 'Please Wait', message);
+      else window.__flasherFallback('info', 'Please Wait', message);
+      return;
+    }
+
+    submissionLock.current = true;
+    setIsSubmitting(true);
+
     try {
       const payload = {
         fullName,
@@ -155,12 +167,16 @@ const JdsSatLanding = () => {
         setForm(initialForm);
       } else {
         const text = await res.text();
-        if (flasher) flasher.flash('error', 'Server', text || 'Submission failed');
-        else window.__flasherFallback('error', 'Server', text || 'Submission failed');
+        const message = text || 'Submission failed';
+        if (flasher) flasher.flash('error', res.status === 409 ? 'Already Registered' : 'Server', message);
+        else window.__flasherFallback('error', res.status === 409 ? 'Already Registered' : 'Server', message);
       }
     } catch (err) {
       if (flasher) flasher.flash('error', 'Network', 'Unable to submit - check your connection');
       else window.__flasherFallback('error', 'Network', 'Unable to submit - check your connection');
+    } finally {
+      submissionLock.current = false;
+      setIsSubmitting(false);
     }
   };
 
@@ -235,7 +251,9 @@ const JdsSatLanding = () => {
           <input name="city" placeholder="City" className="form-input" value={form.city} onChange={(e) => setField('city', e.target.value)} />
           <input name="state" placeholder="State" className="form-input" value={form.state} onChange={(e) => setField('state', e.target.value)} />
           <input name="resume" placeholder="Resume Link (Optional)" className="form-input" value={form.resume} onChange={(e) => setField('resume', e.target.value)} />
-          <button type="submit" className="btn btn-primary" style={{ color: '#000' }}>Submit Registration</button>
+          <button type="submit" className="btn btn-primary" style={{ color: '#000' }} disabled={isSubmitting}>
+            {isSubmitting ? 'Submitting Registration...' : 'Submit Registration'}
+          </button>
         </form>
       </section>
 

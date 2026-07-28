@@ -21,7 +21,27 @@ router.post('/contact', async (req, res) => {
 
 router.post('/enquiry', async (req, res) => {
   try {
-    const enquiry = new Enquiry(req.body);
+    const payload = { ...req.body };
+    const email = typeof payload.email === 'string' ? payload.email.trim().toLowerCase() : '';
+    const phone = typeof payload.phone === 'string' ? payload.phone.replace(/\D/g, '') : '';
+
+    if (payload.source === 'JDS-SAT') {
+      const existing = await Enquiry.findOne({
+        source: 'JDS-SAT',
+        $or: [{ email }, { phone }],
+      }).select('email phone').lean();
+
+      if (existing) {
+        const duplicateFields = [];
+        if (existing.email === email) duplicateFields.push('email address');
+        if (existing.phone === phone) duplicateFields.push('mobile number');
+        return res.status(409).send(`A registration already exists with this ${duplicateFields.join(' and ')}.`);
+      }
+    }
+
+    payload.email = email;
+    payload.phone = phone;
+    const enquiry = new Enquiry(payload);
     await enquiry.save();
     res.status(201).send('Enquiry submitted!');
   } catch (error) {
