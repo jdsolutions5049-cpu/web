@@ -24,7 +24,7 @@ const AdminDashboard = () => {
                 body: JSON.stringify(credentials)
             });
             const result = await response.text();
-            if (result.includes("Successful")) {
+            if (response.ok && result.includes("Successful")) {
                 setIsLoggedIn(true);
                 fetchStats();
                 flashMsg('success', 'Welcome', 'Logged in successfully');
@@ -41,13 +41,25 @@ const AdminDashboard = () => {
     const fetchStats = async () => {
         setLoading(true);
         try {
-            const [enqRes, conRes] = await Promise.all([
-                fetchWithTimeout(buildApiUrl("/api/admin/enquiries")),
-                fetchWithTimeout(buildApiUrl("/api/admin/contacts"))
-            ]);
+            let responses;
+            let lastError;
+            for (let attempt = 0; attempt < 3; attempt += 1) {
+                try {
+                    responses = await Promise.all([
+                        fetchWithTimeout(buildApiUrl("/api/admin/enquiries"), {}, 30000),
+                        fetchWithTimeout(buildApiUrl("/api/admin/contacts"), {}, 30000)
+                    ]);
+                    if (responses.every((response) => response.ok)) break;
+                    throw new Error('Dashboard data is still loading');
+                } catch (error) {
+                    lastError = error;
+                    if (attempt < 2) await new Promise((resolve) => setTimeout(resolve, 1000));
+                }
+            }
+            if (!responses || !responses.every((response) => response.ok)) throw lastError || new Error('Failed to fetch data');
             setData({
-                enquiries: await enqRes.json(),
-                contacts: await conRes.json()
+                enquiries: await responses[0].json(),
+                contacts: await responses[1].json()
             });
         } catch (err) {
             console.error("Fetch failed", err);

@@ -21,7 +21,10 @@ app.get('/api/health', (req, res) => {
 });
 
 app.use((req, res, next) => {
-  if (req.path.startsWith('/api') && require('mongoose').connection.readyState !== 1 && req.path !== '/api/health') {
+  // Authentication only checks environment credentials and must remain available
+  // while MongoDB is still connecting during a cold start.
+  const isLoginRequest = req.path === '/api/admin/login';
+  if (req.path.startsWith('/api') && require('mongoose').connection.readyState !== 1 && req.path !== '/api/health' && !isLoginRequest) {
     return res.status(503).json({ error: 'The service is temporarily unavailable. Please try again.' });
   }
   next();
