@@ -1,0 +1,147 @@
+﻿<%- include('partials/header') %>
+<main class="dashboard">
+  <aside class="dashboard-side">
+    <a class="brand" href="/">
+      <img src="/logo.jpeg" alt="">
+      <span><strong>JD Solutions</strong><small>ADMIN PORTAL</small></span>
+    </a>
+    <nav>
+      <a class="<%= view === 'dashboard' ? 'active' : '' %>" href="/admin">Dashboard</a>
+      <a class="<%= view === 'courses' ? 'active' : '' %>" href="/admin?view=courses">Courses</a>
+      <a class="<%= view === 'internships' ? 'active' : '' %>" href="/admin?view=internships">Internships</a>
+      <a class="<%= view === 'corporate' ? 'active' : '' %>" href="/admin?view=corporate">Corporate</a>
+      <a class="<%= view === 'sat' ? 'active' : '' %>" href="/admin?view=sat">JDS-SAT</a>
+      <a class="<%= view === 'contacts' ? 'active' : '' %>" href="/admin?view=contacts">Contact leads</a>
+      <a href="/">View website</a>
+    </nav>
+    <form action="/admin/logout" method="post">
+      <button type="submit"><i class="bi bi-box-arrow-left"></i> Sign out</button>
+    </form>
+    <form class="sat-switch" action="/admin/settings/sat" method="post">
+      <div><span>JDS-SAT page</span><small><%= satEnabled ? 'Visible on website' : 'Currently hidden' %></small></div>
+      <label class="switch"><input type="checkbox" name="satEnabled" <%= satEnabled ? 'checked' : '' %> onchange="this.form.submit()"><span></span></label>
+    </form>
+  </aside>
+
+  <section class="dashboard-main">
+    <div class="dashboard-header">
+      <div>
+        <span class="eyebrow">OVERVIEW</span>
+        <h1>Lead management</h1>
+      </div>
+      <form action="/admin/data" method="get">
+        <button class="btn btn-light" type="submit"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
+      </form>
+    </div>
+
+    <%
+      const enquiries = data?.enquiries || [];
+      const contacts = data?.contacts || [];
+      const courses = enquiries.filter(item => item.type === 'Course');
+      const internships = enquiries.filter(item => item.type === 'Internship');
+      const corporate = enquiries.filter(item => item.type === 'Corporate Training');
+      const sat = enquiries.filter(item => item.source === 'JDS-SAT');
+      const selectedView = view || 'dashboard';
+      const categoryGroups = [
+        { key: 'courses', title: 'Courses', items: courses },
+        { key: 'internships', title: 'Internships', items: internships },
+        { key: 'corporate', title: 'Corporate training', items: corporate },
+        { key: 'sat', title: 'JDS-SAT', items: sat }
+      ];
+      const visibleGroups = selectedView === 'dashboard' ? categoryGroups : categoryGroups.filter(group => group.key === selectedView);
+      const contactGroup = { key: 'contacts', title: 'Contact leads', items: contacts };
+      const visiblePanels = selectedView === 'contacts' ? [contactGroup] : (selectedView === 'dashboard' ? [...visibleGroups, contactGroup] : visibleGroups);
+    %>
+
+    <div class="stat-grid">
+      <div><b><%= enquiries.length %></b><span>Total enquiries</span></div>
+      <div><b><%= courses.length %></b><span>Courses</span></div>
+      <div><b><%= internships.length %></b><span>Internships</span></div>
+      <div><b><%= corporate.length %></b><span>Corporate</span></div>
+      <div><b><%= sat.length %></b><span>JDS-SAT</span></div>
+      <div><b><%= contacts.length %></b><span>Contact leads</span></div>
+    </div>
+
+    <div class="category-grid">
+      <% visiblePanels.forEach(panel => { %>
+        <section class="data-panel category-panel">
+          <div class="panel-header">
+            <div>
+              <h2><%= panel.title %></h2>
+              <p><%= panel.items.length %> item<%= panel.items.length === 1 ? '' : 's' %> in this category.</p>
+            </div>
+            <span class="count"><%= panel.items.length %></span>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <% if (panel.key === 'contacts') { %>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Message</th>
+                    <th>Created</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% if (!panel.items.length) { %>
+                    <tr><td colspan="4" class="empty-state">No contact leads yet.</td></tr>
+                  <% } else { %>
+                    <% panel.items.forEach(item => { %>
+                      <tr>
+                        <td><strong><%= item.name || '-' %></strong></td>
+                        <td><%= item.email || '-' %></td>
+                        <td><%= item.message || '-' %></td>
+                        <td><%= item.createdAt ? new Date(item.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '-' %></td>
+                      </tr>
+                    <% }); %>
+                  <% } %>
+                </tbody>
+              <% } else { %>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Contact</th>
+                    <th>Interest</th>
+                    <th>Created</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% if (!panel.items.length) { %>
+                    <tr><td colspan="5" class="empty-state">No <%= panel.title.toLowerCase() %> yet.</td></tr>
+                  <% } else { %>
+                    <% panel.items.forEach(item => { %>
+                      <tr>
+                        <td>
+                          <strong><%= item.fullName || '-' %></strong>
+                          <small><%= item.college || item.course || '' %></small>
+                        </td>
+                        <td>
+                          <%= item.email || '-' %>
+                          <small><%= item.phone || '' %></small>
+                        </td>
+                        <td>
+                          <span class="tag"><%= item.source === 'JDS-SAT' ? 'JDS-SAT' : (item.type || 'General') %></span>
+                          <small><%= item.course || item.domain || 'General enquiry' %></small>
+                        </td>
+                        <td><%= item.createdAt ? new Date(item.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '-' %></td>
+                        <td>
+                          <form action="/admin/delete/enquiries/<%= item._id %>" method="post" class="inline-delete">
+                            <button type="submit" aria-label="Delete entry"><i class="bi bi-trash3"></i></button>
+                          </form>
+                        </td>
+                      </tr>
+                    <% }); %>
+                  <% } %>
+                </tbody>
+              <% } %>
+            </table>
+          </div>
+        </section>
+      <% }); %>
+    </div>
+  </section>
+</main>
+<%- include('partials/footer') %>

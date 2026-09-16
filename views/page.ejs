@@ -1,0 +1,57 @@
+<%- include('partials/header', { description }) %>
+<%- include('partials/nav') %>
+<main class="inner-page">
+  <section class="page-hero">
+    <div class="page-hero-copy reveal">
+      <p class="kicker light"><span></span> <%= eyebrow %></p>
+      <h1><%= heading %></h1>
+      <p class="hero-lead"><%= intro %></p>
+      <a class="btn btn-acid" href="#page-enquiry">Discuss your requirement <i class="bi bi-arrow-up-right"></i></a>
+    </div>
+    <div class="page-hero-mark reveal"><i class="bi <%= icon %>"></i><span>JDS / <%= slug.replace('-', ' ').toUpperCase() %></span></div>
+  </section>
+
+  <section class="section page-content">
+    <div class="section-intro">
+      <p class="kicker"><span></span> WHAT WE OFFER</p>
+      <h2>Designed for<br><em>real progress.</em></h2>
+    </div>
+    <div class="service-grid">
+      <% items.forEach((item, index) => { %>
+        <article class="service-card reveal">
+          <div class="service-card-top"><span>0<%= index + 1 %></span><i class="bi <%= item[2] %>"></i></div>
+          <h3><%= item[0] %></h3>
+          <p><%= item[1] %></p>
+          <a href="#page-enquiry">Enquire now <i class="bi bi-arrow-up-right"></i></a>
+        </article>
+      <% }) %>
+    </div>
+  </section>
+
+  <section id="page-enquiry" class="section enquiry page-enquiry reveal">
+    <div class="enquiry-copy">
+      <p class="kicker light"><span></span> LET'S WORK TOGETHER</p>
+      <h2><%= formTitle %>.</h2>
+      <p>Share your goals and a member of our team will contact you with the right next step.</p>
+      <div class="contact-chip"><i class="bi bi-clock"></i><span><b>Usually replies within a day</b><small>+91 83080 35049</small></span></div>
+    </div>
+    <form class="form-card" action="/enquiry" method="post">
+      <h3>Start here.</h3>
+      <input type="hidden" name="returnTo" value="/<%= slug === 'about' ? 'about' : slug %>">
+      <input type="hidden" name="source" value="<%= formType %>">
+      <input type="hidden" name="type" value="<%= formType %>">
+      <input type="hidden" name="domain" value="<%= formType %>">
+      <label>Full name<input name="fullName" required placeholder="Your name"></label>
+      <div class="form-row"><label>Email<input type="email" name="email" required placeholder="you@example.com"></label><label>Phone<input name="phone" required placeholder="+91 83080 35049"></label></div>
+      <label>Organization / college<input name="organization" placeholder="Your organization or college"></label>
+      <label>Tell us about your requirement<textarea name="message" rows="4" required placeholder="How can we help?"></textarea></label>
+      <button class="btn btn-acid" type="submit">Send enquiry <i class="bi bi-arrow-up-right"></i></button>
+    </form>
+  </section>
+
+  <section class="section contact page-contact">
+    <div><p class="kicker"><span></span> GET IN TOUCH</p><h2>Make the next<br><em>step clear.</em></h2></div>
+    <div class="contact-details"><% items.slice(0, 3).forEach(item => { %><p><i class="bi <%= item[2] %>"></i><span><%= item[0] %><br><b><%= item[1] %></b></span></p><% }) %></div>
+  </section>
+</main>
+<%- include('partials/footer') %>

@@ -1,0 +1,24 @@
+const express = require('express');
+const pages = require('../controllers/pageController');
+const submissions = require('../controllers/submissionController');
+const admin = require('../controllers/adminController');
+
+const router = express.Router();
+router.get('/', pages.home);
+router.get(['/internships', '/courses'], pages.home);
+router.get('/services', pages.page('services'));
+router.get('/corporate-training', pages.page('corporate-training'));
+router.get('/college-training', pages.page('college-training'));
+router.get(['/about', '/about-us'], pages.page('about'));
+router.get(['/contact', '/contact-us'], pages.page('contact'));
+router.get('/jds-sat', pages.sat);
+router.post('/contact', submissions.contact);
+router.post('/enquiry', submissions.enquiry);
+router.get('/admin', admin.requireLogin, admin.data, pages.adminDashboard);
+router.post('/admin/login', admin.login);
+router.post('/admin/logout', admin.logout);
+router.get('/admin/data', admin.requireLogin, admin.data, pages.adminDashboard);
+router.post('/admin/settings/sat', admin.requireLogin, admin.updateSatVisibility);
+router.post('/admin/delete/:collection/:id', admin.delete);
+router.use(pages.notFound);
+module.exports = router;
