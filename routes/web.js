@@ -5,7 +5,9 @@ const admin = require('../controllers/adminController');
 
 const router = express.Router();
 router.get('/', pages.home);
-router.get(['/internships', '/courses'], pages.home);
+router.get('/internships', pages.home);
+router.get('/courses', pages.courses);
+router.get('/career-acceleration', pages.careerAcceleration);
 router.get('/services', pages.page('services'));
 router.get('/corporate-training', pages.page('corporate-training'));
 router.get('/college-training', pages.page('college-training'));

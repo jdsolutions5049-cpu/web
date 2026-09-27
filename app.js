@@ -66,6 +66,7 @@ app.use((req, res, next) => {
   next();
 });
 app.use(express.static(path.join(__dirname, 'public'), { index: false }));
+app.use('/vendor/three', express.static(path.join(__dirname, 'node_modules/three/build')));
 
 app.get('/api/health', (req, res) => {
   const databaseReady = require('mongoose').connection.readyState === 1;

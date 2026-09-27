@@ -1,0 +1,93 @@
+<%- include('partials/header', { description }) %>
+<%- include('partials/nav') %>
+<main class="inner-page">
+  <section class="page-hero">
+    <div class="page-hero-copy reveal">
+      <p class="kicker light"><span></span> COURSES & INTERNSHIPS</p>
+      <h1>Choose your next<br><em>career move.</em></h1>
+      <p class="hero-lead">Build practical skills through focused courses and hands-on internship programs. Find a starting point that fits what you want to learn next.</p>
+      <div class="hero-actions"><a class="btn btn-acid" href="#career-courses">Explore courses <i class="bi bi-arrow-down"></i></a><a class="under-link" href="#career-internships">Explore internships <i class="bi bi-arrow-down-right"></i></a></div>
+    </div>
+    <div class="page-hero-mark reveal"><i class="bi bi-mortarboard"></i><span>JDS / CAREER PATHS</span></div>
+  </section>
+
+  <section id="career-courses" class="section courses-list-section">
+    <div class="courses-section-heading">
+      <div><p class="kicker"><span></span> BUILD YOUR SKILLS</p><h2>Technology<br><em>courses.</em></h2></div>
+      <p>Explore programming, data, web, quality, and engineering design courses. Choose a course to start an enquiry with your interest preselected.</p>
+    </div>
+    <div class="courses-grid">
+      <% courses.forEach((course, index) => { %>
+        <article class="course-list-card reveal">
+          <div class="course-list-meta"><span>0<%= index + 1 %></span><span><%= course.category %></span></div>
+          <i class="bi <%= course.icon %> course-list-icon" aria-hidden="true"></i>
+          <h3><%= course.name %></h3>
+          <p><%= course.description %></p>
+          <a href="#career-enquiry" data-domain="<%= course.name %>" data-type="Course">Enquire about this course <i class="bi bi-arrow-up-right"></i></a>
+        </article>
+      <% }) %>
+    </div>
+    <a class="under-link dark-link" href="/courses">View the full course page <i class="bi bi-arrow-up-right"></i></a>
+  </section>
+
+  <section id="career-internships" class="section dark-panel reveal">
+    <div class="section-top"><div><p class="kicker light"><span></span> LEARN THROUGH EXPERIENCE</p><h2>Internships.<br><em>Build as you learn.</em></h2></div><p>Work through practical projects with focused guidance and build experience in a field that interests you.</p></div>
+    <div class="program-grid">
+      <% internships.forEach((item, index) => { %>
+        <article class="program-card">
+          <div class="program-meta"><span>0<%= index + 1 %></span><i class="bi <%= item[1] %>"></i></div>
+          <h3><%= item[0] %></h3>
+          <p><%= item[2] %></p>
+          <div class="program-bottom"><span>INTERNSHIP</span><a href="#career-enquiry" data-domain="<%= item[0] %>" data-type="Internship">Enquire <i class="bi bi-arrow-up-right"></i></a></div>
+        </article>
+      <% }) %>
+    </div>
+  </section>
+
+  <section id="career-enquiry" class="section enquiry page-enquiry reveal">
+    <div class="enquiry-copy">
+      <p class="kicker light"><span></span> START A CONVERSATION</p>
+      <h2>Tell us where<br>you want to <em>go.</em></h2>
+      <p>Choose a course or internship and our team will help you with the next steps.</p>
+      <div class="contact-chip"><i class="bi bi-chat-square-text"></i><span><b>Usually replies within a day</b><small>+91 83080 35049</small></span></div>
+    </div>
+    <form class="form-card" action="/enquiry" method="post">
+      <h3>Career program enquiry</h3>
+      <input type="hidden" name="returnTo" value="/career-acceleration">
+      <input type="hidden" name="source" value="Career Acceleration">
+      <label>Full name<input name="fullName" required placeholder="Your name"></label>
+      <div class="form-row"><label>Email<input type="email" name="email" required placeholder="you@example.com"></label><label>Phone<input name="phone" required placeholder="+91 83080 35049"></label></div>
+      <label>Program type<select name="type" required><option value="">Choose a program type</option><option value="Course">Course</option><option value="Internship">Internship</option></select></label>
+      <label>Course or internship<select name="domain" required><option value="">Choose a program</option><optgroup label="Courses"><% courseNames.forEach(course => { %><option value="<%= course %>"><%= course %></option><% }) %></optgroup><optgroup label="Internships"><% internshipNames.forEach(internship => { %><option value="<%= internship %>"><%= internship %></option><% }) %></optgroup></select></label>
+      <label>What would you like to learn?<textarea name="message" rows="3" placeholder="Share your goals or questions"></textarea></label>
+      <button class="btn btn-acid" type="submit">Send enquiry <i class="bi bi-arrow-up-right"></i></button>
+    </form>
+  </section>
+
+  <section class="section career-next-steps reveal" aria-labelledby="career-next-steps-title">
+    <div class="career-next-heading">
+      <p class="kicker"><span></span> AFTER YOU ENQUIRE</p>
+      <h2 id="career-next-steps-title">A clear next step<br><em>starts here.</em></h2>
+      <p>We’ll help you understand your options and find a practical way to move forward.</p>
+    </div>
+    <div class="career-step-list">
+      <article class="career-step">
+        <span class="career-step-number">01</span>
+        <i class="bi bi-chat-square-text" aria-hidden="true"></i>
+        <div><h3>We review your enquiry</h3><p>We’ll look at the course or internship you’re interested in and what you’d like to learn.</p></div>
+      </article>
+      <article class="career-step">
+        <span class="career-step-number">02</span>
+        <i class="bi bi-telephone-outbound" aria-hidden="true"></i>
+        <div><h3>Our team gets in touch</h3><p>We’ll answer your questions and walk you through the program details.</p></div>
+      </article>
+      <article class="career-step">
+        <span class="career-step-number">03</span>
+        <i class="bi bi-signpost-split" aria-hidden="true"></i>
+        <div><h3>Choose how to begin</h3><p>Once you have the information you need, our team can help with the next steps.</p></div>
+      </article>
+    </div>
+    <a class="career-next-call" href="tel:+918308035049"><i class="bi bi-telephone"></i><span><b>Prefer to talk?</b><small>Call +91 83080 35049</small></span><i class="bi bi-arrow-up-right" aria-hidden="true"></i></a>
+  </section>
+</main>
+<%- include('partials/footer') %>

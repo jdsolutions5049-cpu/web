@@ -1,8 +1,19 @@
-const courses = [
-  'Python Programming', 'Java Programming', 'C Programming', 'C++', 'SQL', 'Power BI',
-  'Web Development', 'AI & Machine Learning', 'Data Analysis', 'Software Testing',
-  'AutoCAD', 'SolidWorks', 'CATIA'
+const courseCatalog = [
+  { name: 'Python Programming', category: 'Programming', icon: 'bi-code-slash', description: 'Learn Python fundamentals, object-oriented programming, and practical scripting through guided exercises.' },
+  { name: 'Java Programming', category: 'Programming', icon: 'bi-braces', description: 'Build a strong foundation in Java, object-oriented design, and application development.' },
+  { name: 'C Programming', category: 'Programming', icon: 'bi-terminal', description: 'Understand core programming concepts, memory, and problem solving with C.' },
+  { name: 'C++', category: 'Programming', icon: 'bi-cpu', description: 'Explore object-oriented programming and write efficient applications with C++.' },
+  { name: 'SQL', category: 'Data & Analytics', icon: 'bi-database', description: 'Query, organize, and manage relational data with practical SQL exercises.' },
+  { name: 'Power BI', category: 'Data & Analytics', icon: 'bi-bar-chart-line', description: 'Turn data into useful dashboards and reports with data modeling and visualization.' },
+  { name: 'Web Development', category: 'Web & Quality', icon: 'bi-globe2', description: 'Create responsive websites and learn the core technologies behind the modern web.' },
+  { name: 'AI & Machine Learning', category: 'Data & Analytics', icon: 'bi-robot', description: 'Get introduced to machine learning workflows, model building, and applied AI.' },
+  { name: 'Data Analysis', category: 'Data & Analytics', icon: 'bi-graph-up-arrow', description: 'Work with datasets, find patterns, and communicate insights using analysis tools.' },
+  { name: 'Software Testing', category: 'Web & Quality', icon: 'bi-check2-square', description: 'Practice software testing fundamentals, test case design, and quality assurance workflows.' },
+  { name: 'AutoCAD', category: 'Engineering Design', icon: 'bi-rulers', description: 'Develop technical drawing skills and create accurate 2D and 3D designs in AutoCAD.' },
+  { name: 'SolidWorks', category: 'Engineering Design', icon: 'bi-box', description: 'Model mechanical parts and assemblies, then prepare clear engineering drawings.' },
+  { name: 'CATIA', category: 'Engineering Design', icon: 'bi-gear-wide-connected', description: 'Learn 3D part design, assemblies, and product modeling with CATIA.' }
 ];
+const courses = courseCatalog.map(course => course.name);
 
 const internships = [
   ['Web Development', 'bi-globe2', 'Master HTML, CSS, JavaScript, React, and Node.js.'],
@@ -17,6 +28,9 @@ const pageData = { courses, internships };
 const SiteSetting = require('../models/SiteSetting');
 
 const getSiteSettings = async () => {
+  // Public pages can render with the schema defaults while MongoDB is offline.
+  // The persisted setting will be picked up again once the connection returns.
+  if (SiteSetting.db.readyState !== 1) return { key: 'main', satEnabled: true };
   const settings = await SiteSetting.findOneAndUpdate(
     { key: 'main' },
     { $setOnInsert: { key: 'main', satEnabled: true } },
@@ -29,6 +43,36 @@ exports.home = async (req, res, next) => {
   try {
     const settings = await getSiteSettings();
     res.render('home', { title: 'Internships & IT Services in Pune', ...pageData, homePage: true, satEnabled: settings.satEnabled, message: req.query.message });
+  } catch (error) { next(error); }
+};
+exports.courses = async (req, res, next) => {
+  try {
+    const settings = await getSiteSettings();
+    res.render('courses', {
+      title: 'IT & Engineering Courses in Pune',
+      description: 'Explore practical programming, data, web, software testing, and engineering design courses at Jay Dynamic Solutions in Pune.',
+      canonical: `https://www.jdsolutionss.com${req.path}`,
+      courses: courseCatalog,
+      courseNames: courses,
+      satEnabled: settings.satEnabled,
+      message: req.query.message
+    });
+  } catch (error) { next(error); }
+};
+exports.careerAcceleration = async (req, res, next) => {
+  try {
+    const settings = await getSiteSettings();
+    res.render('career-acceleration', {
+      title: 'Career Courses & Internships in Pune',
+      description: 'Explore practical technology courses and internships at Jay Dynamic Solutions, and choose a program that fits your next step.',
+      canonical: `https://www.jdsolutionss.com${req.path}`,
+      courses: courseCatalog,
+      courseNames: courses,
+      internships,
+      internshipNames: internships.map(item => item[0]),
+      satEnabled: settings.satEnabled,
+      message: req.query.message
+    });
   } catch (error) { next(error); }
 };
 const sitePages = {

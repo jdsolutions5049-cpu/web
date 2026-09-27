@@ -1,0 +1,71 @@
+<%- include('partials/header', { description }) %>
+<%- include('partials/nav') %>
+<main class="inner-page courses-page">
+  <section class="courses-hero">
+    <div class="courses-hero-copy reveal">
+      <p class="kicker light"><span></span> COURSES / BUILD PRACTICAL SKILLS</p>
+      <h1>Learn something<br><em>you can use.</em></h1>
+      <p class="hero-lead">Explore focused courses in programming, data, web, quality, and engineering design. Choose a path and talk with our team about getting started.</p>
+      <a class="btn btn-acid" href="#all-courses">Explore courses <i class="bi bi-arrow-down"></i></a>
+    </div>
+    <div class="courses-hero-aside reveal">
+      <span>JDS / LEARNING PATHS</span>
+      <b><%= courses.length %></b>
+      <small>courses to explore</small>
+      <i class="bi bi-arrow-down-right"></i>
+    </div>
+  </section>
+
+  <section id="all-courses" class="section courses-list-section">
+    <div class="courses-section-heading">
+      <div><p class="kicker"><span></span> FIND YOUR NEXT SKILL</p><h2>Choose your<br><em>starting point.</em></h2></div>
+      <p>Each course is built around practical learning. Send an enquiry with the course you have in mind and we will help you find the right next step.</p>
+    </div>
+    <div class="courses-grid">
+      <% courses.forEach((course, index) => { %>
+        <article class="course-list-card reveal">
+          <div class="course-list-meta"><span>0<%= index + 1 %></span><span><%= course.category %></span></div>
+          <i class="bi <%= course.icon %> course-list-icon" aria-hidden="true"></i>
+          <h3><%= course.name %></h3>
+          <p><%= course.description %></p>
+          <a href="#course-enquiry" data-domain="<%= course.name %>">Enquire about this course <i class="bi bi-arrow-up-right"></i></a>
+        </article>
+      <% }) %>
+    </div>
+  </section>
+
+  <section class="section course-approach">
+    <div class="approach-heading">
+      <p class="kicker"><span></span> LEARN BY DOING</p>
+      <h2>Build skills<br><em>step by step.</em></h2>
+      <p>Start with the essentials, practise with relevant tools, then use your new skills to solve practical problems.</p>
+      <div class="course-audiences"><span>For students</span><span>For graduates</span><span>For working professionals</span></div>
+    </div>
+    <div class="approach-steps">
+      <article><span>01</span><div><h3>Understand the foundations</h3><p>Get familiar with the key concepts and vocabulary in your chosen subject.</p></div><i class="bi bi-lightbulb" aria-hidden="true"></i></article>
+      <article><span>02</span><div><h3>Practise with the tools</h3><p>Build confidence through guided exercises using course-relevant languages and software.</p></div><i class="bi bi-tools" aria-hidden="true"></i></article>
+      <article><span>03</span><div><h3>Apply what you learn</h3><p>Use your skills in practical tasks and projects connected to real-world work.</p></div><i class="bi bi-box-arrow-up-right" aria-hidden="true"></i></article>
+    </div>
+  </section>
+
+  <section id="course-enquiry" class="section enquiry courses-enquiry reveal">
+    <div class="enquiry-copy">
+      <p class="kicker light"><span></span> TAKE THE NEXT STEP</p>
+      <h2>Start with a<br><em>conversation.</em></h2>
+      <p>Tell us which course interests you. Our team will get in touch to discuss your goals and the program details.</p>
+      <div class="contact-chip"><i class="bi bi-chat-square-text"></i><span><b>Usually replies within a day</b><small>+91 83080 35049</small></span></div>
+    </div>
+    <form class="form-card" action="/enquiry" method="post">
+      <h3>Course enquiry</h3>
+      <input type="hidden" name="returnTo" value="/courses">
+      <input type="hidden" name="source" value="Courses page">
+      <input type="hidden" name="type" value="Course">
+      <label>Full name<input name="fullName" required placeholder="Your name"></label>
+      <div class="form-row"><label>Email<input type="email" name="email" required placeholder="you@example.com"></label><label>Phone<input name="phone" required placeholder="+91 83080 35049"></label></div>
+      <label>Course of interest<select name="domain" required><option value="">Choose a course</option><% courseNames.forEach(course => { %><option value="<%= course %>"><%= course %></option><% }) %></select></label>
+      <label>What would you like to learn?<textarea name="message" rows="3" placeholder="Share your goals or questions"></textarea></label>
+      <button class="btn btn-acid" type="submit">Send enquiry <i class="bi bi-arrow-up-right"></i></button>
+    </form>
+  </section>
+</main>
+<%- include('partials/footer') %>
