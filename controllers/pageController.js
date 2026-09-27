@@ -70,6 +70,7 @@ exports.careerAcceleration = async (req, res, next) => {
       courseNames: courses,
       internships,
       internshipNames: internships.map(item => item[0]),
+      careerJobs: (settings.careerJobs || []).filter(job => job.isActive !== false),
       satEnabled: settings.satEnabled,
       message: req.query.message
     });
@@ -178,13 +179,35 @@ exports.sat = async (req, res, next) => {
   try {
     const settings = await getSiteSettings();
     if (!settings.satEnabled) return res.status(404).render('error', { message: 'This page is currently unavailable.' });
-    res.render('sat', { title: 'JDS-SAT Scholarship Aptitude Test 2026', courses, message: req.query.message });
+    res.render('sat', {
+      title: 'JDS-SAT Scholarship Aptitude Test 2026', courses,
+      satEnabled: settings.satEnabled,
+      satCountdownEnabled: settings.satCountdownEnabled === true,
+      satCountdownAt: settings.satCountdownAt ? new Date(settings.satCountdownAt).toISOString() : '',
+      message: req.query.message
+    });
   } catch (error) { next(error); }
 };
 exports.adminDashboard = (req, res) => {
   if (!req.session.admin) return res.render('admin-login', { title: 'Admin Login', error: null });
-  const allowedViews = new Set(['dashboard', 'courses', 'internships', 'corporate', 'sat', 'contacts']);
+  const allowedViews = new Set(['dashboard', 'courses', 'internships', 'corporate', 'sat', 'contacts', 'recruitment']);
   const view = allowedViews.has(req.query.view) ? req.query.view : 'dashboard';
-  res.render('admin', { title: 'Admin Dashboard', data: req.adminData, view, search: '', satEnabled: req.siteSettings?.satEnabled !== false });
+  res.render('admin', {
+    title: 'Admin Dashboard', data: req.adminData, view, search: '',
+    satEnabled: req.siteSettings?.satEnabled !== false,
+    satCountdownEnabled: req.siteSettings?.satCountdownEnabled === true,
+    satCountdownAt: req.siteSettings?.satCountdownAt || null,
+    careerJobs: req.siteSettings?.careerJobs || [],
+    databaseAvailable: req.adminDatabaseAvailable !== false,
+    databaseNotice: req.adminDatabaseNotice || '',
+    satCountdownLocal: req.siteSettings?.satCountdownAt ? new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: '2-digit', minute: '2-digit', hourCycle: 'h23'
+    }).formatToParts(new Date(req.siteSettings.satCountdownAt)).reduce((parts, part) => {
+      if (part.type !== 'literal') parts[part.type] = part.value;
+      return parts;
+    }, {}) : null,
+    errorMessage: req.query.error || ''
+  });
 };
 exports.notFound = (req, res) => res.status(404).render('error', { message: 'Page not found.' });

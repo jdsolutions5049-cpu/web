@@ -1,1 +1,72 @@
-<%- include('partials/header') %><main class="sat-page"><header class="sat-hero"><div><span class="eyebrow">JDS-SAT 2026</span><h1>One aptitude test.<br><em>A bigger opportunity.</em></h1><p>Compete for merit-based scholarships on industry-oriented IT courses from Jay Dynamic Solutions.</p><a href="#register" class="btn btn-primary">Register now <i class="bi bi-arrow-down"></i></a></div><div class="sat-badge"><i class="bi bi-mortarboard"></i><b>UP TO<br>100%</b><span>scholarship</span></div></header><section class="sat-section"><div class="section-heading"><span class="eyebrow">WHY JDS-SAT</span><h2>Turn potential into progress.</h2></div><div class="sat-grid"><% ['Merit-based scholarship','Industry-oriented training','Participation certificate','Hands-on projects','Expert mentorship','Internship opportunity'].forEach(item => { %><article><i class="bi bi-check-circle"></i><span><%= item %></span></article><% }) %></div></section><section id="register" class="sat-section sat-register"><div class="section-heading"><span class="eyebrow">REGISTER NOW</span><h2>Reserve your place.</h2><p>Fill in your details to compete for scholarships while building industry-ready skills.</p></div><form action="/enquiry" method="post" class="form-card sat-form"><input type="hidden" name="type" value="Scholarship Registration"><input type="hidden" name="source" value="JDS-SAT"><input type="hidden" name="domain" value="JDS-SAT"><div class="form-row"><label>Full name<input name="fullName" required minlength="2"></label><label>Mobile number<input name="phone" required pattern="[6-9][0-9]{9}" maxlength="10"></label></div><div class="form-row"><label>Email<input type="email" name="email" required></label><label>College name<input name="college" required></label></div><div class="form-row"><label>Course<select name="course" required><option value="">Choose course</option><% courses.forEach(course => { %><option><%= course %></option><% }) %></select></label><label>Branch<input name="branch"></label></div><div class="form-row"><label>Year<input name="year"></label><label>City<input name="city"></label></div><div class="form-row"><label>State<input name="state"></label><label>Resume link <small>(optional)</small><input name="resume"></label></div><button type="submit" class="btn btn-primary">Submit registration <i class="bi bi-arrow-right"></i></button></form></section><section class="sat-section"><div class="section-heading"><span class="eyebrow">EXAM INFO</span><h2>Simple, focused, fair.</h2></div><div class="facts"><span><b>Online</b>Mode</span><span><b>60 min</b>Duration</span><span><b>50</b>Questions</span><span><b>MCQ</b>Type</span></div><div class="sat-copy"><h3>Who can apply?</h3><p>Engineering and Polytechnic students, BCA, B.Sc Computer Science, MCA, diploma students, fresh graduates, and anyone interested in IT skills.</p><h3>Courses covered</h3><div class="pills"><% courses.forEach(course => { %><span><%= course %></span><% }) %></div></div></section><section class="sat-section faq"><div class="section-heading"><span class="eyebrow">FAQ</span><h2>Questions, answered.</h2></div><details><summary>Is the test free?</summary><p>The final test fee policy will be announced before registration closes.</p></details><details><summary>Is scholarship guaranteed?</summary><p>Scholarship is awarded based on performance and the announced criteria.</p></details><details><summary>How will results be announced?</summary><p>Results will be announced through email and website updates.</p></details></section></main><%- include('partials/footer') %>
+<%- include('partials/header') %>
+<%- include('partials/nav', { satEnabled: true }) %>
+<main class="sat-page">
+  <header class="sat-hero">
+    <div class="sat-hero-copy">
+      <span class="eyebrow"><i class="bi bi-stars"></i> JDS-SAT 2026 · SCHOLARSHIP APTITUDE TEST</span>
+      <h1>One aptitude test.<br><em>A bigger opportunity.</em></h1>
+      <p>Compete for merit-based scholarships on industry-oriented IT courses from Jay Dynamic Solutions.</p>
+      <% if (satCountdownEnabled && satCountdownAt) { %>
+        <div class="sat-countdown" data-countdown="<%= satCountdownAt %>" aria-label="Countdown to the JDS-SAT test">
+          <div class="sat-countdown-heading"><i class="bi bi-stopwatch"></i><span>Test begins in</span></div>
+          <div class="sat-countdown-units">
+            <div><b data-countdown-days>00</b><small>Days</small></div>
+            <div><b data-countdown-hours>00</b><small>Hours</small></div>
+            <div><b data-countdown-minutes>00</b><small>Minutes</small></div>
+            <div><b data-countdown-seconds>00</b><small>Seconds</small></div>
+          </div>
+          <p data-countdown-message aria-live="polite"></p>
+        </div>
+      <% } %>
+      <a href="#register" class="btn btn-primary">Register for JDS-SAT <i class="bi bi-arrow-down-right"></i></a>
+      <span class="sat-hero-note"><i class="bi bi-shield-check"></i> Open to eligible students and graduates</span>
+    </div>
+    <div class="sat-hero-art" aria-hidden="true">
+      <span class="sat-orbit sat-orbit-one"></span><span class="sat-orbit sat-orbit-two"></span>
+      <div class="sat-badge"><i class="bi bi-mortarboard"></i><b>UP TO<br>100%</b><span>scholarship</span></div>
+      <span class="sat-art-note"><i class="bi bi-lightning-charge-fill"></i> Learn. Prove. Progress.</span>
+    </div>
+  </header>
+
+  <section class="sat-section sat-facts-band" aria-label="Test at a glance">
+    <div><b>Online</b><span>Test mode</span></div><div><b>60 min</b><span>Test duration</span></div><div><b>50</b><span>Multiple-choice questions</span></div><div><b>Merit-based</b><span>Scholarship consideration</span></div>
+  </section>
+
+  <section class="sat-section sat-journey">
+    <div class="section-heading"><span class="eyebrow">YOUR JDS-SAT JOURNEY</span><h2>A clear path from registration to results.</h2><p>Know what to expect at each step and keep your focus on the opportunity ahead.</p></div>
+    <div class="sat-journey-grid">
+      <article><span>01</span><i class="bi bi-pencil-square"></i><h3>Register</h3><p>Share your contact and education details, then choose the course that interests you.</p></article>
+      <article><span>02</span><i class="bi bi-laptop"></i><h3>Take the test</h3><p>Complete the online, 50-question aptitude test within the 60-minute duration.</p></article>
+      <article><span>03</span><i class="bi bi-award"></i><h3>Hear from our team</h3><p>Scholarship decisions follow the announced performance criteria. Results are shared by email and website updates.</p></article>
+    </div>
+  </section>
+
+  <section class="sat-section sat-benefits">
+    <div class="section-heading"><span class="eyebrow">WHY JDS-SAT</span><h2>Turn potential into progress.</h2><p>Take a step toward practical learning with support that continues beyond the assessment.</p></div>
+    <div class="sat-grid"><% ['Merit-based scholarship','Industry-oriented training','Participation certificate','Hands-on projects','Expert mentorship','Internship opportunity'].forEach((item, index) => { %><article><i class="bi <%= ['bi-award','bi-mortarboard','bi-patch-check','bi-kanban','bi-person-video3','bi-briefcase'][index] %>"></i><span><%= item %></span></article><% }) %></div>
+  </section>
+
+  <section id="register" class="sat-section sat-register">
+    <div class="section-heading"><span class="eyebrow">REGISTER NOW</span><h2>Reserve your place.</h2><p>Fill in your details to compete for scholarships while building industry-ready skills.</p><div class="sat-contact-note"><i class="bi bi-chat-square-text"></i><span><b>Need help registering?</b><small>Call +91 83080 35049</small></span></div></div>
+    <form action="/enquiry" method="post" class="form-card sat-form" data-whatsapp-form>
+      <input type="hidden" name="type" value="Scholarship Registration"><input type="hidden" name="source" value="JDS-SAT"><input type="hidden" name="domain" value="JDS-SAT">
+      <div class="form-row"><label>Full name<input name="fullName" required minlength="2" autocomplete="name" placeholder="Your full name"></label><label>Mobile number<input name="phone" required pattern="[6-9][0-9]{9}" maxlength="10" inputmode="numeric" autocomplete="tel" placeholder="10-digit mobile number"></label></div>
+      <div class="form-row"><label>Email<input type="email" name="email" required autocomplete="email" placeholder="you@example.com"></label><label>College name<input name="college" required placeholder="Your college or institute"></label></div>
+      <div class="form-row"><label>Course<select name="course" required><option value="">Choose course</option><% courses.forEach(course => { %><option><%= course %></option><% }) %></select></label><label>Branch<input name="branch" placeholder="Your branch"></label></div>
+      <div class="form-row"><label>Year of study<input name="year" placeholder="e.g. Third year"></label><label>City<input name="city" autocomplete="address-level2" placeholder="Your city"></label></div>
+      <div class="form-row"><label>State<input name="state" autocomplete="address-level1" placeholder="Your state"></label><label>Resume link <small>(optional)</small><input name="resume" type="url" placeholder="https://…"></label></div>
+      <div class="enquiry-actions"><button type="submit" class="btn btn-primary">Submit registration <i class="bi bi-arrow-right"></i></button><button class="whatsapp-enquiry" type="button" data-whatsapp-enquiry><i class="bi bi-whatsapp"></i> Ask for more info</button></div>
+      <p class="sat-form-note"><i class="bi bi-lock"></i> Your details are used to process your JDS-SAT registration.</p>
+    </form>
+  </section>
+
+  <section class="sat-section sat-eligibility">
+    <div class="sat-eligibility-intro"><span class="eyebrow">WHO CAN APPLY</span><h2>Your next step can start here.</h2><p>JDS-SAT welcomes learners from computing, engineering, and related backgrounds who are interested in building IT skills.</p></div>
+    <div class="sat-eligibility-list"><span><i class="bi bi-check2"></i> Engineering and Polytechnic students</span><span><i class="bi bi-check2"></i> BCA, B.Sc. Computer Science, and MCA students</span><span><i class="bi bi-check2"></i> Diploma students and fresh graduates</span><span><i class="bi bi-check2"></i> Anyone interested in IT skills</span></div>
+  </section>
+
+  <section class="sat-section sat-course-section"><div class="section-heading"><span class="eyebrow">LEARNING PATHS</span><h2>Explore courses covered.</h2><p>Choose an area you would like to explore through an industry-oriented course.</p></div><div class="pills"><% courses.forEach(course => { %><span><i class="bi bi-arrow-up-right"></i> <%= course %></span><% }) %></div></section>
+
+  <section class="sat-section faq"><div class="section-heading"><span class="eyebrow">FAQ</span><h2>Questions, answered.</h2></div><details><summary>Is the test free?</summary><p>The final test fee policy will be announced before registration closes.</p></details><details><summary>Is scholarship guaranteed?</summary><p>Scholarship is awarded based on performance and the announced criteria.</p></details><details><summary>How will results be announced?</summary><p>Results will be announced through email and website updates.</p></details></section>
+</main>
+<%- include('partials/footer') %>

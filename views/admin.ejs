@@ -1,4 +1,4 @@
-﻿<%- include('partials/header') %>
+<%- include('partials/header', { adminArea: true }) %>
 <main class="dashboard">
   <aside class="dashboard-side">
     <a class="brand" href="/">
@@ -9,6 +9,7 @@
       <a class="<%= view === 'dashboard' ? 'active' : '' %>" href="/admin">Dashboard</a>
       <a class="<%= view === 'courses' ? 'active' : '' %>" href="/admin?view=courses">Courses</a>
       <a class="<%= view === 'internships' ? 'active' : '' %>" href="/admin?view=internships">Internships</a>
+      <a class="<%= view === 'recruitment' ? 'active' : '' %>" href="/admin?view=recruitment">Career recruitment</a>
       <a class="<%= view === 'corporate' ? 'active' : '' %>" href="/admin?view=corporate">Corporate</a>
       <a class="<%= view === 'sat' ? 'active' : '' %>" href="/admin?view=sat">JDS-SAT</a>
       <a class="<%= view === 'contacts' ? 'active' : '' %>" href="/admin?view=contacts">Contact leads</a>
@@ -33,6 +34,9 @@
         <button class="btn btn-light" type="submit"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
       </form>
     </div>
+
+    <% if (!databaseAvailable && databaseNotice) { %><div class="admin-notice admin-notice-error"><i class="bi bi-database-exclamation"></i><%= databaseNotice %></div><% } %>
+    <% if (errorMessage) { %><div class="admin-notice admin-notice-error"><i class="bi bi-exclamation-circle"></i><%= errorMessage %></div><% } %>
 
     <%
       const enquiries = data?.enquiries || [];
@@ -142,6 +146,42 @@
         </section>
       <% }); %>
     </div>
+
+    <% if (selectedView === 'recruitment') { %>
+      <section class="admin-feature-panel recruitment-editor">
+        <div class="admin-feature-heading"><span class="admin-feature-icon"><i class="bi bi-person-workspace"></i></span><div><span class="eyebrow">CAREER PAGE</span><h2>Publish a job opening</h2><p>Add an active role and it will appear on the public career page.</p></div></div>
+        <form action="/admin/career/jobs" method="post" class="admin-editor-form">
+          <label>Role title<input name="title" maxlength="100" required placeholder="e.g. Frontend Developer"></label>
+          <div class="form-row"><label>Department<input name="department" maxlength="80" placeholder="e.g. Engineering"></label><label>Employment type<select name="employmentType" required><option value="">Choose type</option><option>Full-time</option><option>Part-time</option><option>Internship</option><option>Contract</option></select></label></div>
+          <div class="form-row"><label>Location<input name="location" maxlength="100" required placeholder="e.g. Pune / Hybrid"></label><label>Application link <small>(optional; HTTPS or mailto)</small><input name="applyUrl" maxlength="300" placeholder="https://… or mailto:…"></label></div>
+          <label>Role summary<textarea name="description" rows="4" maxlength="1200" required placeholder="Describe the role and what the candidate will do"></textarea></label>
+          <label class="admin-check"><input type="checkbox" name="isActive" checked><span>Publish this opening immediately</span></label>
+          <button class="btn btn-acid" type="submit"><i class="bi bi-plus-lg"></i> Add career opening</button>
+        </form>
+      </section>
+
+      <section class="admin-feature-panel">
+        <div class="panel-header"><div><h2>Career openings</h2><p><%= careerJobs.length %> opening<%= careerJobs.length === 1 ? '' : 's' %> saved</p></div><span class="count"><%= careerJobs.length %></span></div>
+        <% if (careerJobs.length) { %>
+          <div class="admin-job-list"><% careerJobs.forEach(job => { %>
+            <article class="admin-job-row"><span class="admin-job-status <%= job.isActive ? 'is-active' : '' %>"><%= job.isActive ? 'Live' : 'Draft' %></span><div><h3><%= job.title %></h3><p><%= [job.department, job.employmentType, job.location].filter(Boolean).join(' · ') %></p></div><form action="/admin/career/jobs/<%= job._id %>/delete" method="post" onsubmit="return confirm('Remove this career opening?')"><button class="admin-delete-button" type="submit" aria-label="Delete <%= job.title %>"><i class="bi bi-trash3"></i></button></form></article>
+          <% }) %></div>
+        <% } else { %><p class="admin-empty-note">No roles have been added yet. Use the form above to publish the first opening.</p><% } %>
+      </section>
+    <% } %>
+
+    <% if (selectedView === 'sat') { %>
+      <section class="admin-feature-panel sat-timer-editor">
+        <div class="admin-feature-heading"><span class="admin-feature-icon"><i class="bi bi-stopwatch"></i></span><div><span class="eyebrow">JDS-SAT HERO</span><h2>Countdown timer</h2><p>Set the date and time applicants should count down to. Time is entered in India Standard Time.</p></div></div>
+        <form action="/admin/settings/sat-timer" method="post" class="admin-editor-form">
+          <label class="admin-check"><input type="checkbox" name="satCountdownEnabled" <%= satCountdownEnabled ? 'checked' : '' %> data-countdown-toggle><span>Show countdown on the JDS-SAT page</span></label>
+          <label>Test date and time (IST)<input type="datetime-local" name="satCountdownAt" value="<%= satCountdownLocal ? `${satCountdownLocal.year}-${satCountdownLocal.month}-${satCountdownLocal.day}T${satCountdownLocal.hour}:${satCountdownLocal.minute}` : '' %>" data-countdown-date <%= satCountdownEnabled ? 'required' : '' %>></label>
+          <button class="btn btn-acid" type="submit"><i class="bi bi-check2"></i> Save countdown settings</button>
+          <small class="admin-help"><%= satCountdownEnabled ? 'Countdown is enabled on the public SAT hero.' : 'Countdown is currently hidden from the public SAT page.' %></small>
+        </form>
+      </section>
+    <% } %>
   </section>
 </main>
-<%- include('partials/footer') %>
+<script src="/js/app.js"></script>
+</body></html>

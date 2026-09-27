@@ -35,7 +35,7 @@
       <p>Share your goals and a member of our team will contact you with the right next step.</p>
       <div class="contact-chip"><i class="bi bi-clock"></i><span><b>Usually replies within a day</b><small>+91 83080 35049</small></span></div>
     </div>
-    <form class="form-card" action="/enquiry" method="post">
+    <form class="form-card" action="/enquiry" method="post" data-whatsapp-form>
       <h3>Start here.</h3>
       <input type="hidden" name="returnTo" value="/<%= slug === 'about' ? 'about' : slug %>">
       <input type="hidden" name="source" value="<%= formType %>">
@@ -45,7 +45,7 @@
       <div class="form-row"><label>Email<input type="email" name="email" required placeholder="you@example.com"></label><label>Phone<input name="phone" required placeholder="+91 83080 35049"></label></div>
       <label>Organization / college<input name="organization" placeholder="Your organization or college"></label>
       <label>Tell us about your requirement<textarea name="message" rows="4" required placeholder="How can we help?"></textarea></label>
-      <button class="btn btn-acid" type="submit">Send enquiry <i class="bi bi-arrow-up-right"></i></button>
+      <div class="enquiry-actions"><button class="btn btn-acid" type="submit">Send enquiry <i class="bi bi-arrow-up-right"></i></button><button class="whatsapp-enquiry" type="button" data-whatsapp-enquiry><i class="bi bi-whatsapp"></i> Ask for more info</button></div>
     </form>
   </section>
 

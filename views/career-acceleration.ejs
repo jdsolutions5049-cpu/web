@@ -6,28 +6,9 @@
       <p class="kicker light"><span></span> COURSES & INTERNSHIPS</p>
       <h1>Choose your next<br><em>career move.</em></h1>
       <p class="hero-lead">Build practical skills through focused courses and hands-on internship programs. Find a starting point that fits what you want to learn next.</p>
-      <div class="hero-actions"><a class="btn btn-acid" href="#career-courses">Explore courses <i class="bi bi-arrow-down"></i></a><a class="under-link" href="#career-internships">Explore internships <i class="bi bi-arrow-down-right"></i></a></div>
+      <div class="hero-actions"><a class="btn btn-acid" href="#career-opportunities">View openings <i class="bi bi-arrow-down"></i></a><a class="under-link" href="#career-internships">Explore internships <i class="bi bi-arrow-down-right"></i></a></div>
     </div>
     <div class="page-hero-mark reveal"><i class="bi bi-mortarboard"></i><span>JDS / CAREER PATHS</span></div>
-  </section>
-
-  <section id="career-courses" class="section courses-list-section">
-    <div class="courses-section-heading">
-      <div><p class="kicker"><span></span> BUILD YOUR SKILLS</p><h2>Technology<br><em>courses.</em></h2></div>
-      <p>Explore programming, data, web, quality, and engineering design courses. Choose a course to start an enquiry with your interest preselected.</p>
-    </div>
-    <div class="courses-grid">
-      <% courses.forEach((course, index) => { %>
-        <article class="course-list-card reveal">
-          <div class="course-list-meta"><span>0<%= index + 1 %></span><span><%= course.category %></span></div>
-          <i class="bi <%= course.icon %> course-list-icon" aria-hidden="true"></i>
-          <h3><%= course.name %></h3>
-          <p><%= course.description %></p>
-          <a href="#career-enquiry" data-domain="<%= course.name %>" data-type="Course">Enquire about this course <i class="bi bi-arrow-up-right"></i></a>
-        </article>
-      <% }) %>
-    </div>
-    <a class="under-link dark-link" href="/courses">View the full course page <i class="bi bi-arrow-up-right"></i></a>
   </section>
 
   <section id="career-internships" class="section dark-panel reveal">
@@ -44,6 +25,29 @@
     </div>
   </section>
 
+  <section id="career-opportunities" class="section career-opportunities reveal">
+    <div class="courses-section-heading">
+      <div><p class="kicker"><span></span> CAREER OPENINGS</p><h2>Find your next<br><em>opportunity.</em></h2></div>
+      <p>Explore current roles with Jay Dynamic Solutions. Select an opening to contact the hiring team.</p>
+    </div>
+    <% if (careerJobs.length) { %>
+      <div class="career-job-grid">
+        <% careerJobs.forEach((job, index) => { %>
+          <article class="career-job-card">
+            <div class="career-job-meta"><span><%= job.department || 'JDS TEAM' %></span><span><%= job.location %></span></div>
+            <span class="career-job-number"><%= String(index + 1).padStart(2, '0') %></span>
+            <h3><%= job.title %></h3>
+            <span class="career-job-type"><i class="bi bi-briefcase"></i> <%= job.employmentType %></span>
+            <p><%= job.description %></p>
+            <a href="<%= job.applyUrl || 'mailto:Info@jdsolutionss.com?subject=Career%20opportunity%20enquiry' %>" <%= job.applyUrl && job.applyUrl.startsWith('https://') ? 'target="_blank" rel="noopener noreferrer"' : '' %>>Apply for this role <i class="bi bi-arrow-up-right"></i></a>
+          </article>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <div class="career-jobs-empty"><span class="career-job-orbit"><i class="bi bi-stars"></i></span><div><h3>No open roles right now</h3><p>Check back soon for new opportunities with our team.</p></div></div>
+    <% } %>
+  </section>
+
   <section id="career-enquiry" class="section enquiry page-enquiry reveal">
     <div class="enquiry-copy">
       <p class="kicker light"><span></span> START A CONVERSATION</p>
@@ -51,7 +55,7 @@
       <p>Choose a course or internship and our team will help you with the next steps.</p>
       <div class="contact-chip"><i class="bi bi-chat-square-text"></i><span><b>Usually replies within a day</b><small>+91 83080 35049</small></span></div>
     </div>
-    <form class="form-card" action="/enquiry" method="post">
+    <form class="form-card" action="/enquiry" method="post" data-whatsapp-form>
       <h3>Career program enquiry</h3>
       <input type="hidden" name="returnTo" value="/career-acceleration">
       <input type="hidden" name="source" value="Career Acceleration">
@@ -60,7 +64,7 @@
       <label>Program type<select name="type" required><option value="">Choose a program type</option><option value="Course">Course</option><option value="Internship">Internship</option></select></label>
       <label>Course or internship<select name="domain" required><option value="">Choose a program</option><optgroup label="Courses"><% courseNames.forEach(course => { %><option value="<%= course %>"><%= course %></option><% }) %></optgroup><optgroup label="Internships"><% internshipNames.forEach(internship => { %><option value="<%= internship %>"><%= internship %></option><% }) %></optgroup></select></label>
       <label>What would you like to learn?<textarea name="message" rows="3" placeholder="Share your goals or questions"></textarea></label>
-      <button class="btn btn-acid" type="submit">Send enquiry <i class="bi bi-arrow-up-right"></i></button>
+      <div class="enquiry-actions"><button class="btn btn-acid" type="submit">Send enquiry <i class="bi bi-arrow-up-right"></i></button><button class="whatsapp-enquiry" type="button" data-whatsapp-enquiry><i class="bi bi-whatsapp"></i> Ask for more info</button></div>
     </form>
   </section>
 

@@ -55,7 +55,7 @@
       <p>Tell us which course interests you. Our team will get in touch to discuss your goals and the program details.</p>
       <div class="contact-chip"><i class="bi bi-chat-square-text"></i><span><b>Usually replies within a day</b><small>+91 83080 35049</small></span></div>
     </div>
-    <form class="form-card" action="/enquiry" method="post">
+    <form class="form-card" action="/enquiry" method="post" data-whatsapp-form>
       <h3>Course enquiry</h3>
       <input type="hidden" name="returnTo" value="/courses">
       <input type="hidden" name="source" value="Courses page">
@@ -64,7 +64,7 @@
       <div class="form-row"><label>Email<input type="email" name="email" required placeholder="you@example.com"></label><label>Phone<input name="phone" required placeholder="+91 83080 35049"></label></div>
       <label>Course of interest<select name="domain" required><option value="">Choose a course</option><% courseNames.forEach(course => { %><option value="<%= course %>"><%= course %></option><% }) %></select></label>
       <label>What would you like to learn?<textarea name="message" rows="3" placeholder="Share your goals or questions"></textarea></label>
-      <button class="btn btn-acid" type="submit">Send enquiry <i class="bi bi-arrow-up-right"></i></button>
+      <div class="enquiry-actions"><button class="btn btn-acid" type="submit">Send enquiry <i class="bi bi-arrow-up-right"></i></button><button class="whatsapp-enquiry" type="button" data-whatsapp-enquiry><i class="bi bi-whatsapp"></i> Ask for more info</button></div>
     </form>
   </section>
 </main>

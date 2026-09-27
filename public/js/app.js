@@ -18,6 +18,41 @@ const updateScrollProgress = () => {
 };
 updateScrollProgress();
 window.addEventListener('scroll', updateScrollProgress, { passive: true });
+document.querySelectorAll('[data-countdown]').forEach(countdown => {
+	const targetTime = new Date(countdown.dataset.countdown).getTime();
+	const units = {
+		days: countdown.querySelector('[data-countdown-days]'),
+		hours: countdown.querySelector('[data-countdown-hours]'),
+		minutes: countdown.querySelector('[data-countdown-minutes]'),
+		seconds: countdown.querySelector('[data-countdown-seconds]')
+	};
+	const message = countdown.querySelector('[data-countdown-message]');
+	let timer;
+	const renderCountdown = () => {
+		const remaining = Math.max(0, targetTime - Date.now());
+		const values = {
+			days: Math.floor(remaining / 86400000),
+			hours: Math.floor((remaining % 86400000) / 3600000),
+			minutes: Math.floor((remaining % 3600000) / 60000),
+			seconds: Math.floor((remaining % 60000) / 1000)
+		};
+		Object.entries(values).forEach(([unit, value]) => {
+			if (units[unit]) units[unit].textContent = String(value).padStart(2, '0');
+		});
+		if (remaining <= 0) {
+			if (message) message.textContent = 'The scheduled test start time has arrived.';
+			window.clearInterval(timer);
+		}
+	};
+	renderCountdown();
+	if (targetTime > Date.now()) timer = window.setInterval(renderCountdown, 1000);
+});
+document.querySelectorAll('[data-countdown-toggle]').forEach(toggle => {
+	const dateInput = toggle.form?.querySelector('[data-countdown-date]');
+	const syncRequirement = () => { if (dateInput) dateInput.required = toggle.checked; };
+	toggle.addEventListener('change', syncRequirement);
+	syncRequirement();
+});
 document.querySelectorAll('[data-scroll]').forEach(button => button.addEventListener('click', () => document.querySelector('.internship-slider').scrollBy({ left: button.dataset.scroll === 'left' ? -360 : 360, behavior: 'smooth' })));
 document.querySelectorAll('[data-domain]').forEach(link => link.addEventListener('click', () => {
 	const domain = document.querySelector('select[name="domain"]');
@@ -26,6 +61,26 @@ document.querySelectorAll('[data-domain]').forEach(link => link.addEventListener
 	if (type && link.dataset.type) type.value = link.dataset.type;
 }));
 setTimeout(() => document.querySelector('.flash')?.remove(), 5000);
+
+document.querySelectorAll('[data-whatsapp-enquiry]').forEach(button => button.addEventListener('click', () => {
+	const form = button.closest('[data-whatsapp-form]');
+	if (!form) return;
+	const fields = new FormData(form);
+	const details = [
+		['fullName', 'Name'], ['phone', 'Phone'], ['email', 'Email'], ['type', 'Interested in'],
+		['domain', 'Program'], ['course', 'Course'], ['organization', 'Organization'], ['college', 'College'],
+		['branch', 'Branch'], ['year', 'Year of study'], ['city', 'City'], ['state', 'State'], ['message', 'My question']
+	];
+	const lines = details
+		.map(([key, label]) => [label, String(fields.get(key) || '').trim()])
+		.filter(([, value]) => value)
+		.map(([label, value]) => `${label}: ${value}`);
+	const message = [
+		'Hi Jay Dynamic Solutions, can I get more information?',
+		...(lines.length ? ['', ...lines] : [])
+	].join('\n');
+	window.open(`https://wa.me/918308035049?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer');
+}));
 
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const typewriter = document.querySelector('[data-typewriter]');
