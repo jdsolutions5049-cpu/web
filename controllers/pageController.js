@@ -43,8 +43,8 @@ exports.home = async (req, res, next) => {
   try {
     const settings = await getSiteSettings();
     res.render('home', {
-      title: 'Web Development, IT Services & Internships in Pune',
-      description: 'Explore website and web application development, custom business software, hands-on IT internships, and technology courses in Pune with Jay Dynamic Solutions.',
+      title: 'IT Services & Training in Pune',
+      description: 'Jay Dynamic Solutions provides website development, custom software, business applications, IT training, and internship programs in Wagholi, Pune.',
       canonical: 'https://www.jdsolutionss.com/',
       ...pageData,
       homePage: true,
@@ -57,8 +57,8 @@ exports.courses = async (req, res, next) => {
   try {
     const settings = await getSiteSettings();
     res.render('courses', {
-      title: 'IT & Engineering Courses in Pune',
-      description: 'Explore practical programming, data, web, software testing, and engineering design courses at Jay Dynamic Solutions in Pune.',
+      title: 'IT Courses in Pune | Programming & CAD',
+      description: 'Explore programming, data analytics, web development, software testing, and engineering design courses with Jay Dynamic Solutions in Pune.',
       canonical: `https://www.jdsolutionss.com${req.path}`,
       courses: courseCatalog,
       courseNames: courses,
@@ -87,11 +87,11 @@ exports.careerAcceleration = async (req, res, next) => {
 const sitePages = {
   services: {
     title: 'IT Services & Website Design',
-    seoTitle: 'Website Development & IT Services in Pune',
+    seoTitle: 'Website Development in Pune | IT Services',
     description: 'Website design and development, web applications, mobile apps, CRM, billing, HRMS, e-commerce, and custom business software for companies in Pune.',
     eyebrow: 'IT SERVICES',
-    heading: 'Website development and software for growing businesses.',
-    intro: 'Build a business website, web application, mobile app, or custom system with a Pune-based team. We also provide CRM, billing, HRMS, e-commerce, maintenance, and support services.',
+    heading: 'Website development and IT services in Pune.',
+    intro: 'Build a business website, web application, mobile app, or custom system with a Wagholi-based team. We also provide CRM, billing, HRMS, e-commerce, maintenance, and support services.',
     icon: 'bi-window-stack',
     items: [
       ['Website Design & Development', 'Responsive business websites, landing pages, portfolios, and CMS solutions designed around your goals.', 'bi-window-stack'],
@@ -110,11 +110,11 @@ const sitePages = {
   },
   'corporate-training': {
     title: 'Corporate Training Programs',
-    seoTitle: 'Corporate Training Programs for Modern Teams',
-    description: 'Customized technical, leadership, soft skills, HR, and workplace training programs for companies and teams.',
+    seoTitle: 'Corporate IT Training in Pune | Jay Dynamic Solutions',
+    description: 'Explore customized technical and workplace training for companies in Pune, including programming, data analytics, AI, cybersecurity, software testing, and team upskilling.',
     eyebrow: 'CORPORATE TRAINING',
-    heading: 'Build capability inside your team.',
-    intro: 'Practical, customized training designed around your people, your tools, and the outcomes your organization needs next.',
+    heading: 'Corporate IT training for teams in Pune.',
+    intro: 'Plan practical, customized training around your team, tools, and learning goals. Jay Dynamic Solutions works with organizations in Wagholi and across Pune.',
     icon: 'bi-people',
     items: [
       ['Technical Training', 'Full stack development, Python, Java, cloud, data analytics, AI, cybersecurity, testing, and emerging technology.', 'bi-cpu'],
@@ -129,11 +129,11 @@ const sitePages = {
   },
   'college-training': {
     title: 'College Workshops & Student Training',
-    seoTitle: 'College Workshops, Seminars & Student Training Programs',
-    description: 'Hands-on college workshops, seminars, faculty development programs, and industry-oriented training for students.',
+    seoTitle: 'College Workshops in Pune | Student IT Training',
+    description: 'Explore technical college workshops, seminars, faculty development, and hands-on student training programs with Jay Dynamic Solutions in Pune.',
     eyebrow: 'COLLEGE TRAINING',
-    heading: 'Turn a workshop into a head start.',
-    intro: 'Give students practical exposure through expert-led workshops, live projects, seminars, and career-focused technology programs.',
+    heading: 'College workshops and student training in Pune.',
+    intro: 'Give students practical exposure through technology workshops, seminars, project labs, and career-focused programs planned for your college.',
     icon: 'bi-mortarboard',
     items: [
       ['Technical Workshops', 'Interactive sessions in web development, programming, data science, AI, IoT, robotics, and cybersecurity.', 'bi-code-square'],
@@ -148,11 +148,11 @@ const sitePages = {
   },
   about: {
     title: 'About Us',
-    seoTitle: 'About Jay Dynamic Solutions | Training & IT Services',
+    seoTitle: 'About Jay Dynamic Solutions in Pune',
     description: 'Learn about Jay Dynamic Solutions, a Pune-based technology and learning partner for businesses, colleges, and aspiring professionals.',
     eyebrow: 'ABOUT JAY DYNAMIC SOLUTIONS',
-    heading: 'A practical partner for learning and building.',
-    intro: 'We bring technology services, corporate learning, and student development together so people and organizations can make meaningful progress.',
+    heading: 'About Jay Dynamic Solutions in Pune.',
+    intro: 'Jay Dynamic Solutions is a technology and learning partner in Wagholi, Pune, supporting businesses, colleges, and aspiring professionals.',
     icon: 'bi-stars',
     items: [
       ['Our approach', 'We listen first, simplify the problem, and deliver work that is useful in the real world.', 'bi-lightbulb'],
@@ -167,8 +167,8 @@ const sitePages = {
     seoTitle: 'Contact Jay Dynamic Solutions in Pune',
     description: 'Contact Jay Dynamic Solutions for IT services, corporate training, college workshops, internships, and student programs.',
     eyebrow: 'CONTACT US',
-    heading: 'Let us talk about the next useful step.',
-    intro: 'Share a little about your requirement and our team will get back to you with a clear way forward.',
+    heading: 'Contact Jay Dynamic Solutions in Pune.',
+    intro: 'Contact our Wagholi team about software development, IT services, corporate training, college workshops, or career programs.',
     icon: 'bi-chat-square-dots',
     items: [
       ['Call us', '+91 83080 35049', 'bi-telephone'],
@@ -185,6 +185,20 @@ exports.page = (slug) => async (req, res, next) => {
   try {
     const settings = await getSiteSettings();
     res.render('page', { ...page, slug, satEnabled: settings.satEnabled, title: page.seoTitle, canonical: `https://www.jdsolutionss.com/${slug}`, message: req.query.message });
+  } catch (error) { next(error); }
+};
+exports.sitemap = async (req, res, next) => {
+  try {
+    const settings = await getSiteSettings();
+    const urls = [
+      '/', '/services', '/courses', '/career-acceleration',
+      '/corporate-training', '/college-training', '/about', '/contact',
+      ...(settings.satEnabled ? ['/jds-sat'] : []),
+    ];
+    const entries = urls.map((url) => `  <url><loc>https://www.jdsolutionss.com${url}</loc></url>`).join('\n');
+    res.type('application/xml').set('Cache-Control', 'public, max-age=300').send(
+      `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${entries}\n</urlset>`
+    );
   } catch (error) { next(error); }
 };
 exports.sat = async (req, res, next) => {
@@ -225,4 +239,4 @@ exports.adminDashboard = (req, res) => {
     errorMessage: req.query.error || ''
   });
 };
-exports.notFound = (req, res) => res.status(404).render('error', { message: 'Page not found.' });
+exports.notFound = (req, res) => res.status(404).render('error', { message: 'Page not found.', noindex: true });

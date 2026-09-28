@@ -6,14 +6,16 @@ const { loginRateLimiter, submissionRateLimiter } = require('../middleware/secur
 
 const router = express.Router();
 router.get('/', pages.home);
-router.get('/internships', pages.home);
+router.get('/internships', (req, res) => res.redirect(301, '/career-acceleration#career-internships'));
 router.get('/courses', pages.courses);
 router.get('/career-acceleration', pages.careerAcceleration);
 router.get('/services', pages.page('services'));
 router.get('/corporate-training', pages.page('corporate-training'));
 router.get('/college-training', pages.page('college-training'));
-router.get(['/about', '/about-us'], pages.page('about'));
-router.get(['/contact', '/contact-us'], pages.page('contact'));
+router.get('/about', pages.page('about'));
+router.get('/about-us', (req, res) => res.redirect(301, '/about'));
+router.get('/contact', pages.page('contact'));
+router.get('/contact-us', (req, res) => res.redirect(301, '/contact'));
 router.get('/jds-sat', pages.sat);
 router.post('/contact', submissionRateLimiter, submissions.contact);
 router.post('/enquiry', submissionRateLimiter, submissions.enquiry);

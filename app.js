@@ -10,6 +10,7 @@ dotenv.config();
 const connectDB = require('./config/db');
 const apiRoutes = require('./routes/api');
 const webRoutes = require('./routes/web');
+const pageController = require('./controllers/pageController');
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
 const isProduction = process.env.NODE_ENV === 'production';
@@ -71,6 +72,9 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
+// Serve the sitemap dynamically so optional pages (such as JDS-SAT) are only
+// listed while they are available to visitors. This must precede static files.
+app.get('/sitemap.xml', pageController.sitemap);
 app.use(express.static(path.join(__dirname, 'public'), { index: false }));
 app.use('/vendor/three', express.static(path.join(__dirname, 'node_modules/three/build')));
 app.set('view engine', 'ejs');
