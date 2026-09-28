@@ -8,7 +8,7 @@
       <p class="hero-lead"><%= intro %></p>
       <a class="btn btn-acid" href="#page-enquiry">Discuss your requirement <i class="bi bi-arrow-up-right"></i></a>
     </div>
-    <div class="page-hero-mark reveal"><i class="bi <%= icon %>"></i><span>JDS / <%= slug.replace('-', ' ').toUpperCase() %></span></div>
+    <div class="page-hero-mark reveal"><i class="bi <%= icon %>"></i><span>JDS / <%= slug.replace(/[-/]/g, ' ').toUpperCase() %></span></div>
   </section>
 
   <section class="section page-content">
@@ -22,7 +22,7 @@
           <div class="service-card-top"><span>0<%= index + 1 %></span><i class="bi <%= item[2] %>"></i></div>
           <h3><%= item[0] %></h3>
           <p><%= item[1] %></p>
-          <a href="#page-enquiry">Enquire now <i class="bi bi-arrow-up-right"></i></a>
+          <% if (item[3]) { %><a href="<%= item[3] %>">Explore CRM software <i class="bi bi-arrow-up-right"></i></a><% } else { %><a href="#page-enquiry">Enquire now <i class="bi bi-arrow-up-right"></i></a><% } %>
         </article>
       <% }) %>
     </div>

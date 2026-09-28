@@ -97,7 +97,7 @@ const sitePages = {
       ['Website Design & Development', 'Responsive business websites, landing pages, portfolios, and CMS solutions designed around your goals.', 'bi-window-stack'],
       ['Web Applications', 'Custom dashboards, portals, booking systems, and internal tools that remove friction from everyday work.', 'bi-code-slash'],
       ['Mobile App Development', 'Reliable Android and cross-platform applications with thoughtful user experiences and maintainable code.', 'bi-phone'],
-      ['CRM Software', 'Customer relationship tools to manage leads, sales pipelines, follow-ups, and customer support in one place.', 'bi-person-lines-fill'],
+      ['CRM Software', 'Customer relationship tools to manage leads, sales pipelines, follow-ups, and customer support in one place.', 'bi-person-lines-fill', '/services/crm-software'],
       ['Billing Software', 'Billing and invoicing systems with payment tracking, tax-ready records, and clear business reports.', 'bi-receipt-cutoff'],
       ['HRMS Software', 'Human resource systems for employee records, attendance, leave, onboarding, and day-to-day HR workflows.', 'bi-people'],
       ['Custom Business Software', 'Purpose-built software shaped around your customers, team workflows, and specific business needs.', 'bi-puzzle'],
@@ -107,6 +107,24 @@ const sitePages = {
     ],
     formTitle: 'Tell us what you want to build',
     formType: 'IT Services',
+  },
+  'services/crm-software': {
+    title: 'Custom CRM Software Development in Pune',
+    seoTitle: 'Custom CRM Software in Pune | Jay Dynamic Solutions',
+    description: 'Explore custom CRM software for lead management, sales pipelines, customer follow-ups, and support workflows from Jay Dynamic Solutions in Pune.',
+    eyebrow: 'CRM SOFTWARE DEVELOPMENT',
+    heading: 'Custom CRM software for your customer workflows.',
+    intro: 'Jay Dynamic Solutions develops CRM software to help businesses organize leads, track sales conversations, manage follow-ups, and keep customer support information together. Talk with our Wagholi, Pune team about your workflow.',
+    icon: 'bi-person-lines-fill',
+    items: [
+      ['Lead management', 'Keep incoming enquiries organized so your team can see who needs a response and what should happen next.', 'bi-person-plus'],
+      ['Sales pipeline tracking', 'Arrange opportunities into stages that reflect how your team moves from first conversation to a decision.', 'bi-kanban'],
+      ['Customer follow-ups', 'Record conversations and follow-up actions so important customer discussions are easier to continue.', 'bi-arrow-repeat'],
+      ['Support information', 'Keep customer questions and support history accessible to the people responsible for helping them.', 'bi-chat-square-text'],
+      ['Workflow fit', 'Discuss the fields, stages, and day-to-day tasks your CRM should support before deciding on the right scope.', 'bi-sliders'],
+    ],
+    formTitle: 'Discuss your CRM requirement',
+    formType: 'CRM Software',
   },
   'corporate-training': {
     title: 'Corporate Training Programs',
@@ -192,6 +210,7 @@ exports.sitemap = async (req, res, next) => {
     const settings = await getSiteSettings();
     const urls = [
       '/', '/services', '/courses', '/career-acceleration',
+      '/services/crm-software',
       '/corporate-training', '/college-training', '/about', '/contact',
       ...(settings.satEnabled ? ['/jds-sat'] : []),
     ];
