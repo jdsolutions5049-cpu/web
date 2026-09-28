@@ -15,7 +15,7 @@ const PORT = Number(process.env.PORT) || 3000;
 const isProduction = process.env.NODE_ENV === 'production';
 
 if (!process.env.SESSION_SECRET || process.env.SESSION_SECRET.length < 32) {
-  throw new Error('SESSION_SECRET must be set to at least 32 characters.');
+  throw new Error('SESSION_SECRET is missing or too short. Set a persistent random value of at least 32 characters in the hosting environment.');
 }
 if (!process.env.ADMIN_USERNAME || !process.env.ADMIN_PASSWORD) {
   throw new Error('ADMIN_USERNAME and ADMIN_PASSWORD must be configured.');

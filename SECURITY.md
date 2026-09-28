@@ -2,6 +2,8 @@
 
 The application requires a unique `SESSION_SECRET` of at least 32 characters and refuses to start in production when `ADMIN_PASSWORD` is shorter than 14 characters. Keep both values in the hosting provider's secret environment settings; never commit `.env`.
 
+To generate a persistent session secret locally, run `node -p "require('crypto').randomBytes(48).toString('base64url')"` and paste its output into the host's `SESSION_SECRET` setting. Keep the same value across deploys; changing it signs out existing sessions.
+
 For production:
 
 - Set `NODE_ENV=production` and serve the site over HTTPS. Behind a single trusted reverse proxy, the app assumes one proxy hop; set `TRUST_PROXY_HOPS` if the deployment has a different topology.
