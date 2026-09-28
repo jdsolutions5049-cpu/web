@@ -9,6 +9,7 @@
       <a class="<%= view === 'dashboard' ? 'active' : '' %>" href="/admin">Dashboard</a>
       <a class="<%= view === 'courses' ? 'active' : '' %>" href="/admin?view=courses">Courses</a>
       <a class="<%= view === 'internships' ? 'active' : '' %>" href="/admin?view=internships">Internships</a>
+      <a class="<%= view === 'college' ? 'active' : '' %>" href="/admin?view=college">College Workshops</a>
       <a class="<%= view === 'recruitment' ? 'active' : '' %>" href="/admin?view=recruitment">Career recruitment</a>
       <a class="<%= view === 'corporate' ? 'active' : '' %>" href="/admin?view=corporate">Corporate</a>
       <a class="<%= view === 'sat' ? 'active' : '' %>" href="/admin?view=sat">JDS-SAT</a>
@@ -16,11 +17,13 @@
       <a href="/">View website</a>
     </nav>
     <form action="/admin/logout" method="post">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
       <button type="submit"><i class="bi bi-box-arrow-left"></i> Sign out</button>
     </form>
     <form class="sat-switch" action="/admin/settings/sat" method="post">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
       <div><span>JDS-SAT page</span><small><%= satEnabled ? 'Visible on website' : 'Currently hidden' %></small></div>
-      <label class="switch"><input type="checkbox" name="satEnabled" <%= satEnabled ? 'checked' : '' %> onchange="this.form.submit()"><span></span></label>
+      <label class="switch"><input type="checkbox" name="satEnabled" <%= satEnabled ? 'checked' : '' %> data-auto-submit><span></span></label>
     </form>
   </aside>
 
@@ -43,12 +46,14 @@
       const contacts = data?.contacts || [];
       const courses = enquiries.filter(item => item.type === 'Course');
       const internships = enquiries.filter(item => item.type === 'Internship');
+      const college = enquiries.filter(item => item.type === 'College Workshop' || item.source === 'College Workshop');
       const corporate = enquiries.filter(item => item.type === 'Corporate Training');
       const sat = enquiries.filter(item => item.source === 'JDS-SAT');
       const selectedView = view || 'dashboard';
       const categoryGroups = [
         { key: 'courses', title: 'Courses', items: courses },
         { key: 'internships', title: 'Internships', items: internships },
+        { key: 'college', title: 'College Workshops', items: college },
         { key: 'corporate', title: 'Corporate training', items: corporate },
         { key: 'sat', title: 'JDS-SAT', items: sat }
       ];
@@ -61,6 +66,7 @@
       <div><b><%= enquiries.length %></b><span>Total enquiries</span></div>
       <div><b><%= courses.length %></b><span>Courses</span></div>
       <div><b><%= internships.length %></b><span>Internships</span></div>
+      <div><b><%= college.length %></b><span>College Workshops</span></div>
       <div><b><%= corporate.length %></b><span>Corporate</span></div>
       <div><b><%= sat.length %></b><span>JDS-SAT</span></div>
       <div><b><%= contacts.length %></b><span>Contact leads</span></div>
@@ -133,6 +139,7 @@
                         <td><%= item.createdAt ? new Date(item.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '-' %></td>
                         <td>
                           <form action="/admin/delete/enquiries/<%= item._id %>" method="post" class="inline-delete">
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                             <button type="submit" aria-label="Delete entry"><i class="bi bi-trash3"></i></button>
                           </form>
                         </td>
@@ -151,6 +158,7 @@
       <section class="admin-feature-panel recruitment-editor">
         <div class="admin-feature-heading"><span class="admin-feature-icon"><i class="bi bi-person-workspace"></i></span><div><span class="eyebrow">CAREER PAGE</span><h2>Publish a job opening</h2><p>Add an active role and it will appear on the public career page.</p></div></div>
         <form action="/admin/career/jobs" method="post" class="admin-editor-form">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
           <label>Role title<input name="title" maxlength="100" required placeholder="e.g. Frontend Developer"></label>
           <div class="form-row"><label>Department<input name="department" maxlength="80" placeholder="e.g. Engineering"></label><label>Employment type<select name="employmentType" required><option value="">Choose type</option><option>Full-time</option><option>Part-time</option><option>Internship</option><option>Contract</option></select></label></div>
           <div class="form-row"><label>Location<input name="location" maxlength="100" required placeholder="e.g. Pune / Hybrid"></label><label>Application link <small>(optional; HTTPS or mailto)</small><input name="applyUrl" maxlength="300" placeholder="https://… or mailto:…"></label></div>
@@ -164,7 +172,7 @@
         <div class="panel-header"><div><h2>Career openings</h2><p><%= careerJobs.length %> opening<%= careerJobs.length === 1 ? '' : 's' %> saved</p></div><span class="count"><%= careerJobs.length %></span></div>
         <% if (careerJobs.length) { %>
           <div class="admin-job-list"><% careerJobs.forEach(job => { %>
-            <article class="admin-job-row"><span class="admin-job-status <%= job.isActive ? 'is-active' : '' %>"><%= job.isActive ? 'Live' : 'Draft' %></span><div><h3><%= job.title %></h3><p><%= [job.department, job.employmentType, job.location].filter(Boolean).join(' · ') %></p></div><form action="/admin/career/jobs/<%= job._id %>/delete" method="post" onsubmit="return confirm('Remove this career opening?')"><button class="admin-delete-button" type="submit" aria-label="Delete <%= job.title %>"><i class="bi bi-trash3"></i></button></form></article>
+            <article class="admin-job-row"><span class="admin-job-status <%= job.isActive ? 'is-active' : '' %>"><%= job.isActive ? 'Live' : 'Draft' %></span><div><h3><%= job.title %></h3><p><%= [job.department, job.employmentType, job.location].filter(Boolean).join(' · ') %></p></div><form action="/admin/career/jobs/<%= job._id %>/delete" method="post" data-confirm="Remove this career opening?"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><button class="admin-delete-button" type="submit" aria-label="Delete <%= job.title %>"><i class="bi bi-trash3"></i></button></form></article>
           <% }) %></div>
         <% } else { %><p class="admin-empty-note">No roles have been added yet. Use the form above to publish the first opening.</p><% } %>
       </section>
@@ -174,6 +182,7 @@
       <section class="admin-feature-panel sat-timer-editor">
         <div class="admin-feature-heading"><span class="admin-feature-icon"><i class="bi bi-stopwatch"></i></span><div><span class="eyebrow">JDS-SAT HERO</span><h2>Countdown timer</h2><p>Set the date and time applicants should count down to. Time is entered in India Standard Time.</p></div></div>
         <form action="/admin/settings/sat-timer" method="post" class="admin-editor-form">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
           <label class="admin-check"><input type="checkbox" name="satCountdownEnabled" <%= satCountdownEnabled ? 'checked' : '' %> data-countdown-toggle><span>Show countdown on the JDS-SAT page</span></label>
           <label>Test date and time (IST)<input type="datetime-local" name="satCountdownAt" value="<%= satCountdownLocal ? `${satCountdownLocal.year}-${satCountdownLocal.month}-${satCountdownLocal.day}T${satCountdownLocal.hour}:${satCountdownLocal.minute}` : '' %>" data-countdown-date <%= satCountdownEnabled ? 'required' : '' %>></label>
           <button class="btn btn-acid" type="submit"><i class="bi bi-check2"></i> Save countdown settings</button>

@@ -53,6 +53,10 @@ document.querySelectorAll('[data-countdown-toggle]').forEach(toggle => {
 	toggle.addEventListener('change', syncRequirement);
 	syncRequirement();
 });
+document.querySelectorAll('[data-auto-submit]').forEach(input => input.addEventListener('change', () => input.form?.requestSubmit()));
+document.querySelectorAll('form[data-confirm]').forEach(form => form.addEventListener('submit', event => {
+	if (!window.confirm(form.dataset.confirm)) event.preventDefault();
+}));
 document.querySelectorAll('[data-scroll]').forEach(button => button.addEventListener('click', () => document.querySelector('.internship-slider').scrollBy({ left: button.dataset.scroll === 'left' ? -360 : 360, behavior: 'smooth' })));
 document.querySelectorAll('[data-domain]').forEach(link => link.addEventListener('click', () => {
 	const domain = document.querySelector('select[name="domain"]');

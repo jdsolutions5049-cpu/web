@@ -1,20 +1,35 @@
 const Contact = require('../models/Contact');
 const Enquiry = require('../models/Enquiry');
 const SiteSetting = require('../models/SiteSetting');
+const mongoose = require('mongoose');
+const crypto = require('crypto');
+const { sameToken } = require('../middleware/security');
 
 exports.requireLogin = (req, res, next) => {
   if (!req.session.admin) return res.render('admin-login', { title: 'Admin Login', error: null });
+  if (!req.session.csrfToken) req.session.csrfToken = crypto.randomBytes(32).toString('hex');
+  res.locals.csrfToken = req.session.csrfToken;
   next();
 };
 
-exports.login = (req, res) => {
-  const valid = req.body.username === process.env.ADMIN_USERNAME && req.body.password === process.env.ADMIN_PASSWORD;
+exports.login = (req, res, next) => {
+  const valid = sameToken(req.body.username, process.env.ADMIN_USERNAME) && sameToken(req.body.password, process.env.ADMIN_PASSWORD);
   if (!valid) return res.status(401).render('admin-login', { title: 'Admin Login', error: 'Invalid credentials.' });
-  req.session.admin = true;
-  res.redirect('/admin');
+  req.session.regenerate(error => {
+    if (error) return next(error);
+    req.session.admin = true;
+    req.session.csrfToken = crypto.randomBytes(32).toString('hex');
+    req.session.save(saveError => saveError ? next(saveError) : res.redirect('/admin'));
+  });
 };
 
-exports.logout = (req, res) => req.session.destroy(() => res.redirect('/admin'));
+exports.logout = (req, res, next) => req.session.destroy(error => {
+  if (error) return next(error);
+  res.clearCookie(process.env.NODE_ENV === 'production' ? '__Host-jds.sid' : 'jds.sid', {
+    httpOnly: true, sameSite: 'lax', secure: process.env.NODE_ENV === 'production', path: '/',
+  });
+  res.redirect('/admin');
+});
 
 exports.data = async (req, res, next) => {
   const fallbackSettings = { satEnabled: true, satCountdownEnabled: false, satCountdownAt: null, careerJobs: [] };
@@ -128,6 +143,9 @@ exports.deleteCareerJob = async (req, res, next) => {
 exports.delete = async (req, res, next) => {
   try {
     if (Enquiry.db.readyState !== 1) return res.redirect('/admin?error=Database+unavailable.+The+entry+was+not+removed.');
+    if (!['contacts', 'enquiries'].includes(req.params.collection) || !mongoose.isValidObjectId(req.params.id)) {
+      return res.redirect('/admin?error=Invalid+record+identifier.');
+    }
     const Model = req.params.collection === 'contacts' ? Contact : Enquiry;
     await Model.findByIdAndDelete(req.params.id);
     res.redirect('/admin');

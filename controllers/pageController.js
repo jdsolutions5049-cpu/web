@@ -89,6 +89,10 @@ const sitePages = {
       ['Website Design & Development', 'Responsive business websites, landing pages, portfolios, and CMS solutions designed around your goals.', 'bi-window-stack'],
       ['Web Applications', 'Custom dashboards, portals, booking systems, and internal tools that remove friction from everyday work.', 'bi-code-slash'],
       ['Mobile App Development', 'Reliable Android and cross-platform applications with thoughtful user experiences and maintainable code.', 'bi-phone'],
+      ['CRM Software', 'Customer relationship tools to manage leads, sales pipelines, follow-ups, and customer support in one place.', 'bi-person-lines-fill'],
+      ['Billing Software', 'Billing and invoicing systems with payment tracking, tax-ready records, and clear business reports.', 'bi-receipt-cutoff'],
+      ['HRMS Software', 'Human resource systems for employee records, attendance, leave, onboarding, and day-to-day HR workflows.', 'bi-people'],
+      ['Custom Business Software', 'Purpose-built software shaped around your customers, team workflows, and specific business needs.', 'bi-puzzle'],
       ['UI/UX Design', 'Research-led interfaces, wireframes, prototypes, and design systems that make products easier to use.', 'bi-bezier2'],
       ['E-commerce Solutions', 'Conversion-focused online stores with secure payments, catalog management, and simple administration.', 'bi-cart3'],
       ['Maintenance & Support', 'Ongoing improvements, security updates, performance checks, and technical support after launch.', 'bi-shield-check'],
@@ -190,7 +194,7 @@ exports.sat = async (req, res, next) => {
 };
 exports.adminDashboard = (req, res) => {
   if (!req.session.admin) return res.render('admin-login', { title: 'Admin Login', error: null });
-  const allowedViews = new Set(['dashboard', 'courses', 'internships', 'corporate', 'sat', 'contacts', 'recruitment']);
+  const allowedViews = new Set(['dashboard', 'courses', 'internships', 'college', 'corporate', 'sat', 'contacts', 'recruitment']);
   const view = allowedViews.has(req.query.view) ? req.query.view : 'dashboard';
   res.render('admin', {
     title: 'Admin Dashboard', data: req.adminData, view, search: '',
