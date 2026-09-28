@@ -10,7 +10,6 @@ router.get('/internships', (req, res) => res.redirect(301, '/career-acceleration
 router.get('/courses', pages.courses);
 router.get('/career-acceleration', pages.careerAcceleration);
 router.get('/services', pages.page('services'));
-router.get('/services/crm-software', pages.page('services/crm-software'));
 router.get('/corporate-training', pages.page('corporate-training'));
 router.get('/college-training', pages.page('college-training'));
 router.get('/about', pages.page('about'));
