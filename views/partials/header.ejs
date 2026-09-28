@@ -7,6 +7,31 @@
   <meta name="description" content="<%= typeof description !== 'undefined' ? description : 'Industry-oriented IT courses, internships and technology services in Pune.' %>">
   <meta name="robots" content="index, follow">
   <% if (typeof canonical !== 'undefined') { %><link rel="canonical" href="<%= canonical %>"><% } %>
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Jay Dynamic Solutions">
+  <meta property="og:title" content="<%= title %> | Jay Dynamic Solutions">
+  <meta property="og:description" content="<%= typeof description !== 'undefined' ? description : 'Industry-oriented IT courses, internships and technology services in Pune.' %>">
+  <% if (typeof canonical !== 'undefined') { %><meta property="og:url" content="<%= canonical %>"><% } %>
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "@id": "https://www.jdsolutionss.com/#organization",
+      "name": "Jay Dynamic Solutions",
+      "legalName": "Jay Dynamic Solutions Pvt.Ltd.",
+      "url": "https://www.jdsolutionss.com/",
+      "logo": "https://www.jdsolutionss.com/logo.jpeg",
+      "telephone": "+918308035049",
+      "email": "info@jdsolutionss.com",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Shop No. 113, Rainbow Crossroad, Wagholi",
+        "addressLocality": "Pune",
+        "addressRegion": "Maharashtra",
+        "addressCountry": "IN"
+      }
+    }
+  </script>
   <link rel="icon" href="/favicon.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">

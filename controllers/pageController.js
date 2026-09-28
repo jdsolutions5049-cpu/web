@@ -42,7 +42,15 @@ const getSiteSettings = async () => {
 exports.home = async (req, res, next) => {
   try {
     const settings = await getSiteSettings();
-    res.render('home', { title: 'Internships & IT Services in Pune', ...pageData, homePage: true, satEnabled: settings.satEnabled, message: req.query.message });
+    res.render('home', {
+      title: 'Web Development, IT Services & Internships in Pune',
+      description: 'Explore website and web application development, custom business software, hands-on IT internships, and technology courses in Pune with Jay Dynamic Solutions.',
+      canonical: 'https://www.jdsolutionss.com/',
+      ...pageData,
+      homePage: true,
+      satEnabled: settings.satEnabled,
+      message: req.query.message
+    });
   } catch (error) { next(error); }
 };
 exports.courses = async (req, res, next) => {
@@ -63,8 +71,8 @@ exports.careerAcceleration = async (req, res, next) => {
   try {
     const settings = await getSiteSettings();
     res.render('career-acceleration', {
-      title: 'Career Courses & Internships in Pune',
-      description: 'Explore practical technology courses and internships at Jay Dynamic Solutions, and choose a program that fits your next step.',
+      title: 'IT Internships in Pune | Career Programs',
+      description: 'Explore hands-on technology internships and career programs in Pune, including web development, app development, data analytics, data science, and AI & machine learning.',
       canonical: `https://www.jdsolutionss.com${req.path}`,
       courses: courseCatalog,
       courseNames: courses,
@@ -79,11 +87,11 @@ exports.careerAcceleration = async (req, res, next) => {
 const sitePages = {
   services: {
     title: 'IT Services & Website Design',
-    seoTitle: 'IT Services, Website Design & Digital Solutions in Pune',
-    description: 'Professional website design, web development, software, and digital solutions for growing businesses in Pune and across India.',
+    seoTitle: 'Website Development & IT Services in Pune',
+    description: 'Website design and development, web applications, mobile apps, CRM, billing, HRMS, e-commerce, and custom business software for companies in Pune.',
     eyebrow: 'IT SERVICES',
-    heading: 'Digital work that helps your business move.',
-    intro: 'From a first website to a complete business platform, we design and build clear, fast, and useful technology for your next stage.',
+    heading: 'Website development and software for growing businesses.',
+    intro: 'Build a business website, web application, mobile app, or custom system with a Pune-based team. We also provide CRM, billing, HRMS, e-commerce, maintenance, and support services.',
     icon: 'bi-window-stack',
     items: [
       ['Website Design & Development', 'Responsive business websites, landing pages, portfolios, and CMS solutions designed around your goals.', 'bi-window-stack'],
@@ -176,7 +184,7 @@ exports.page = (slug) => async (req, res, next) => {
   const page = sitePages[slug];
   try {
     const settings = await getSiteSettings();
-    res.render('page', { ...page, slug, satEnabled: settings.satEnabled, title: page.seoTitle, canonical: `https://www.jdsolutionss.com${req.path}`, message: req.query.message });
+    res.render('page', { ...page, slug, satEnabled: settings.satEnabled, title: page.seoTitle, canonical: `https://www.jdsolutionss.com/${slug}`, message: req.query.message });
   } catch (error) { next(error); }
 };
 exports.sat = async (req, res, next) => {
@@ -184,7 +192,10 @@ exports.sat = async (req, res, next) => {
     const settings = await getSiteSettings();
     if (!settings.satEnabled) return res.status(404).render('error', { message: 'This page is currently unavailable.' });
     res.render('sat', {
-      title: 'JDS-SAT Scholarship Aptitude Test 2026', courses,
+      title: 'JDS-SAT Scholarship Aptitude Test 2026',
+      description: 'Learn about the JDS-SAT scholarship aptitude test, eligibility, important dates, and available student opportunities from Jay Dynamic Solutions.',
+      canonical: 'https://www.jdsolutionss.com/jds-sat',
+      courses,
       satEnabled: settings.satEnabled,
       satCountdownEnabled: settings.satCountdownEnabled === true,
       satCountdownAt: settings.satCountdownAt ? new Date(settings.satCountdownAt).toISOString() : '',
