@@ -48,7 +48,13 @@
       const internships = enquiries.filter(item => item.type === 'Internship');
       const college = enquiries.filter(item => item.type === 'College Workshop' || item.source === 'College Workshop');
       const corporate = enquiries.filter(item => item.type === 'Corporate Training');
-      const sat = enquiries.filter(item => item.source === 'JDS-SAT');
+      const normalizeTag = value => String(value || '').trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+      const sat = enquiries.filter(item => {
+        const sourceTag = normalizeTag(item.source);
+        const domainTag = normalizeTag(item.domain);
+        const typeTag = normalizeTag(item.type);
+        return sourceTag.includes('jdssat') || domainTag === 'jdssat' || typeTag.includes('scholarshipregistration');
+      });
       const selectedView = view || 'dashboard';
       const categoryGroups = [
         { key: 'courses', title: 'Courses', items: courses },
@@ -104,6 +110,44 @@
                         <td><%= item.email || '-' %></td>
                         <td><%= item.message || '-' %></td>
                         <td><%= item.createdAt ? new Date(item.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '-' %></td>
+                      </tr>
+                    <% }); %>
+                  <% } %>
+                </tbody>
+              <% } else if (panel.key === 'sat') { %>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Contact</th>
+                    <th>Education details</th>
+                    <th>Resume</th>
+                    <th>Submitted</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% if (!panel.items.length) { %>
+                    <tr><td colspan="6" class="empty-state">No JDS-SAT registrations yet.</td></tr>
+                  <% } else { %>
+                    <% panel.items.forEach(item => { %>
+                      <tr>
+                        <td><strong><%= item.fullName || '-' %></strong></td>
+                        <td><%= item.email || '-' %><small><%= item.phone || '' %></small></td>
+                        <td>
+                          <small>College: <%= item.college || '-' %></small>
+                          <small>Course: <%= item.course || '-' %></small>
+                          <small>Branch: <%= item.branch || '-' %></small>
+                          <small>Year: <%= item.year || '-' %></small>
+                          <small>Location: <%= [item.city, item.state].filter(Boolean).join(', ') || '-' %></small>
+                        </td>
+                        <td><% if (item.resume && /^https?:\/\//i.test(item.resume)) { %><a href="<%= item.resume %>" target="_blank" rel="noopener noreferrer">Open resume</a><% } else { %>-<% } %></td>
+                        <td><%= item.createdAt ? new Date(item.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '-' %></td>
+                        <td>
+                          <form action="/admin/delete/enquiries/<%= item._id %>" method="post" class="inline-delete">
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                            <button type="submit" aria-label="Delete registration"><i class="bi bi-trash3"></i></button>
+                          </form>
+                        </td>
                       </tr>
                     <% }); %>
                   <% } %>
