@@ -123,7 +123,6 @@ const revealSelector = [
 	'main:not(.dashboard) > header',
 	'main.admin-login',
 	'main.error-page',
-	'.dashboard-main > *',
 	'.service-grid > *',
 	'.courses-grid > *',
 	'.program-grid > *',
@@ -132,9 +131,7 @@ const revealSelector = [
 	'.career-step-list > article',
 	'.approach-steps > article',
 	'.numbers > div',
-	'.sat-grid > article',
-	'.stat-grid > div',
-	'.category-grid > section'
+	'.sat-grid > article'
 ].join(',');
 
 if (!reducedMotion && 'IntersectionObserver' in window) {
