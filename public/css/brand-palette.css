@@ -680,3 +680,11 @@ body.admin-area:before { display:none; }
   .whatsapp-float span { position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap; }
 }
 @media(prefers-reduced-motion:reduce) { .whatsapp-float { animation:none; } .whatsapp-float,.whatsapp-enquiry,.footer-whatsapp { transition:none; } }
+
+/* Keep every home-page section visible in browsers and full-page captures;
+   sections still enter with a brief motion animation on page load. */
+.reveal {
+  animation: rise .7s ease both !important;
+  animation-timeline: auto !important;
+  animation-range: normal !important;
+}
