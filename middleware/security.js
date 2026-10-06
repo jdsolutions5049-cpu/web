@@ -10,6 +10,7 @@ const sameToken = (provided, expected) => {
 const createRateLimiter = ({ windowMs, limit, message }) => {
   const clients = new Map();
   let lastCleanup = Date.now();
+  const maxTrackedClients = 10000;
 
   return (req, res, next) => {
     const now = Date.now();
@@ -17,8 +18,13 @@ const createRateLimiter = ({ windowMs, limit, message }) => {
     let client = clients.get(key);
     if (!client || now - client.startedAt >= windowMs) {
       client = { startedAt: now, count: 0 };
-      clients.set(key, client);
     }
+    // Keep this in-process limiter's memory bounded if requests arrive from
+    // many unique addresses. Refresh insertion order to evict least-recently
+    // used entries first.
+    clients.delete(key);
+    if (clients.size >= maxTrackedClients) clients.delete(clients.keys().next().value);
+    clients.set(key, client);
     client.count += 1;
     if (now - lastCleanup > windowMs) {
       for (const [clientKey, entry] of clients) {
