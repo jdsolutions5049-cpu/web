@@ -43,7 +43,7 @@ exports.home = async (req, res, next) => {
   try {
     const settings = await getSiteSettings();
     res.render('home', {
-      title: 'IT Services & Training in Pune',
+      title: 'IT Services in Pune | Jay Dynamic Solutions',
       description: 'Jay Dynamic Solutions provides website development, custom software, business applications, IT training, and internship programs in Wagholi, Pune.',
       canonical: 'https://www.jdsolutionss.com/',
       ...pageData,
@@ -79,6 +79,20 @@ exports.careerAcceleration = async (req, res, next) => {
       internships,
       internshipNames: internships.map(item => item[0]),
       careerJobs: (settings.careerJobs || []).filter(job => job.isActive !== false),
+      satEnabled: settings.satEnabled,
+      message: req.query.message
+    });
+  } catch (error) { next(error); }
+};
+exports.internshipsPage = async (req, res, next) => {
+  try {
+    const settings = await getSiteSettings();
+    res.render('internships', {
+      title: 'Internships in Pune | Jay Dynamic Solutions',
+      description: 'Explore practical internships in web development, app development, data science, AI and machine learning, and data analytics with Jay Dynamic Solutions in Pune.',
+      canonical: `https://www.jdsolutionss.com${req.path}`,
+      internships,
+      internshipNames: internships.map(item => item[0]),
       satEnabled: settings.satEnabled,
       message: req.query.message
     });
@@ -191,7 +205,7 @@ exports.sitemap = async (req, res, next) => {
   try {
     const settings = await getSiteSettings();
     const urls = [
-      '/', '/services', '/courses', '/career-acceleration',
+      '/', '/services', '/courses', '/internships', '/career-acceleration',
       '/corporate-training', '/college-training', '/about', '/contact',
       ...(settings.satEnabled ? ['/jds-sat'] : []),
     ];

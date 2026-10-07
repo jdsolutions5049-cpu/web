@@ -3,6 +3,9 @@ const Enquiry = require('../models/Enquiry');
 
 exports.contact = async (req, res, next) => {
   try {
+    if (Contact.db.readyState !== 1) {
+      return res.status(503).render('error', { message: 'We can’t receive your message right now because the database is unavailable. Please try again shortly.', noindex: true });
+    }
     const contact = {
       name: typeof req.body.name === 'string' ? req.body.name.trim().slice(0, 120) : '',
       email: typeof req.body.email === 'string' ? req.body.email.trim().toLowerCase().slice(0, 254) : '',
@@ -18,6 +21,9 @@ exports.contact = async (req, res, next) => {
 
 exports.enquiry = async (req, res, next) => {
   try {
+    if (Enquiry.db.readyState !== 1) {
+      return res.status(503).render('error', { message: 'We can’t receive your enquiry right now because the database is unavailable. Please try again shortly.', noindex: true });
+    }
     const text = (key, maxLength) => typeof req.body[key] === 'string' ? req.body[key].trim().slice(0, maxLength) : '';
     const email = text('email', 254).toLowerCase();
     const phone = text('phone', 32).replace(/\D/g, '').slice(0, 15);
@@ -42,7 +48,7 @@ exports.enquiry = async (req, res, next) => {
       if (existing) return res.redirect('/jds-sat?message=' + encodeURIComponent('A registration already exists with this email address or mobile number.'));
     }
     await new Enquiry(payload).save();
-    const allowedReturnPaths = new Set(['/', '/career-acceleration', '/courses', '/services', '/corporate-training', '/college-training', '/about', '/contact']);
+    const allowedReturnPaths = new Set(['/', '/career-acceleration', '/internships', '/courses', '/services', '/corporate-training', '/college-training', '/about', '/contact']);
     const returnTo = text('returnTo', 80);
     const target = payload.source === 'JDS-SAT' ? '/jds-sat' : (allowedReturnPaths.has(returnTo) ? returnTo : '/');
     res.redirect(target + '?message=' + encodeURIComponent('Your enquiry was submitted successfully.'));

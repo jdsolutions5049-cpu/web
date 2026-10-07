@@ -6,7 +6,7 @@ const { loginRateLimiter, submissionRateLimiter } = require('../middleware/secur
 
 const router = express.Router();
 router.get('/', pages.home);
-router.get('/internships', (req, res) => res.redirect(301, '/career-acceleration#career-internships'));
+router.get('/internships', pages.internshipsPage);
 router.get('/courses', pages.courses);
 router.get('/career-acceleration', pages.careerAcceleration);
 router.get('/services', pages.page('services'));

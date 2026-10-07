@@ -1,0 +1,62 @@
+<%- include('partials/header', { description }) %>
+<%- include('partials/nav', { satEnabled }) %>
+<main class="inner-page internship-page">
+  <section class="page-hero">
+    <div class="page-hero-copy reveal">
+      <p class="kicker light"><span></span> HANDS-ON INTERNSHIPS</p>
+      <h1>Learn by doing.<br><em>Grow with purpose.</em></h1>
+      <p class="hero-lead">Build practical technology skills through guided projects, real tools, and support from the Jay Dynamic Solutions team in Pune.</p>
+      <div class="hero-actions"><a class="btn btn-acid" href="#internship-tracks">Explore internships <i class="bi bi-arrow-down"></i></a><a class="under-link" href="#internship-enquiry">Apply now <i class="bi bi-arrow-up-right"></i></a></div>
+    </div>
+    <div class="page-hero-mark reveal"><i class="bi bi-laptop"></i><span>JDS / LEARN BY DOING</span></div>
+  </section>
+
+  <section class="section dark-panel reveal" id="internship-tracks">
+    <div class="section-top"><div><p class="kicker light"><span></span> CHOOSE YOUR DIRECTION</p><h2>Find a field.<br><em>Build your skills.</em></h2></div><p>Explore a practical learning path and tell us what you want to work on. We’ll help you with the next steps.</p></div>
+    <div class="program-grid">
+      <% internships.forEach((item, index) => { %>
+        <article class="program-card">
+          <div class="program-meta"><span><%= String(index + 1).padStart(2, '0') %></span><i class="bi <%= item[1] %>"></i></div>
+          <h3><%= item[0] %></h3>
+          <p><%= item[2] %></p>
+          <div class="program-bottom"><span>INTERNSHIP</span><a href="#internship-enquiry" data-domain="<%= item[0] %>" data-type="Internship">Explore this path <i class="bi bi-arrow-up-right"></i></a></div>
+        </article>
+      <% }) %>
+    </div>
+  </section>
+
+  <section class="section career-next-steps reveal" aria-labelledby="internship-steps-title">
+    <div class="career-next-heading">
+      <p class="kicker"><span></span> YOUR EXPERIENCE</p>
+      <h2 id="internship-steps-title">Turn curiosity<br>into <em>experience.</em></h2>
+      <p>Get clarity about the program before you begin. Our team will help you understand the learning path and application process.</p>
+    </div>
+    <div class="career-step-list">
+      <article class="career-step"><span class="career-step-number">01</span><i class="bi bi-send" aria-hidden="true"></i><div><h3>Tell us what interests you</h3><p>Choose an internship track and share a little about your education and goals.</p></div></article>
+      <article class="career-step"><span class="career-step-number">02</span><i class="bi bi-chat-square-text" aria-hidden="true"></i><div><h3>Talk with our team</h3><p>We’ll review your enquiry and contact you with details about the program.</p></div></article>
+      <article class="career-step"><span class="career-step-number">03</span><i class="bi bi-kanban" aria-hidden="true"></i><div><h3>Learn through projects</h3><p>Build practical skills with guided work in the area you want to explore.</p></div></article>
+    </div>
+  </section>
+
+  <section class="section enquiry page-enquiry reveal" id="internship-enquiry">
+    <div class="enquiry-copy">
+      <p class="kicker light"><span></span> START YOUR APPLICATION</p>
+      <h2>Take the first<br>step toward <em>what’s next.</em></h2>
+      <p>Share your details and internship interests. Our team will get in touch to help you understand the next steps.</p>
+      <div class="contact-chip"><i class="bi bi-chat-square-text"></i><span><b>Usually replies within a day</b><small>+91 83080 35049</small></span></div>
+    </div>
+    <form class="form-card" action="/enquiry" method="post" data-whatsapp-form>
+      <h3>Internship enquiry</h3>
+      <input type="hidden" name="returnTo" value="/internships">
+      <input type="hidden" name="source" value="Internship Page">
+      <input type="hidden" name="type" value="Internship">
+      <label>Full name<input name="fullName" required minlength="2" autocomplete="name" placeholder="Your name"></label>
+      <div class="form-row"><label>Email<input type="email" name="email" required autocomplete="email" placeholder="you@example.com"></label><label>Phone<input name="phone" required inputmode="tel" autocomplete="tel" placeholder="Your phone number"></label></div>
+      <label>Internship track<select name="domain" required><option value="">Choose an internship</option><% internshipNames.forEach(internship => { %><option value="<%= internship %>"><%= internship %></option><% }) %></select></label>
+      <div class="form-row"><label>College / institute<input name="college" autocomplete="organization" placeholder="Your college"></label><label>Course or degree<input name="course" placeholder="e.g. BCA, BE, B.Sc."></label></div>
+      <label>What would you like to learn?<textarea name="message" rows="3" placeholder="Tell us about your interests or goals"></textarea></label>
+      <div class="enquiry-actions"><button class="btn btn-acid" type="submit">Send internship enquiry <i class="bi bi-arrow-up-right"></i></button><button class="whatsapp-enquiry" type="button" data-whatsapp-enquiry><i class="bi bi-whatsapp"></i> Ask for more info</button></div>
+    </form>
+  </section>
+</main>
+<%- include('partials/footer') %>
