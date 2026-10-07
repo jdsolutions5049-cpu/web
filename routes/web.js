@@ -6,7 +6,10 @@ const { loginRateLimiter, submissionRateLimiter } = require('../middleware/secur
 
 const router = express.Router();
 router.get('/', pages.home);
-router.get('/internships', pages.internshipsPage);
+router.get('/internships', (req, res, next) => {
+  res.set('Cache-Control', 'no-store');
+  pages.internshipsPage(req, res, next);
+});
 router.get('/courses', pages.courses);
 router.get('/career-acceleration', pages.careerAcceleration);
 router.get('/services', pages.page('services'));
