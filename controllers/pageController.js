@@ -30,10 +30,10 @@ const SiteSetting = require('../models/SiteSetting');
 const getSiteSettings = async () => {
   // Public pages can render with the schema defaults while MongoDB is offline.
   // The persisted setting will be picked up again once the connection returns.
-  if (SiteSetting.db.readyState !== 1) return { key: 'main', satEnabled: true };
+  if (SiteSetting.db.readyState !== 1) return { key: 'main', satEnabled: true, collegeTrainingEnabled: true, coursesEnabled: true };
   const settings = await SiteSetting.findOneAndUpdate(
     { key: 'main' },
-    { $setOnInsert: { key: 'main', satEnabled: true } },
+    { $setOnInsert: { key: 'main', satEnabled: true, collegeTrainingEnabled: true, coursesEnabled: true } },
     { upsert: true, new: true, setDefaultsOnInsert: true }
   ).lean();
   return settings;
@@ -48,7 +48,9 @@ exports.home = async (req, res, next) => {
       canonical: 'https://www.jdsolutionss.com/',
       ...pageData,
       homePage: true,
-      satEnabled: settings.satEnabled,
+      satEnabled: settings.satEnabled !== false,
+      collegeTrainingEnabled: settings.collegeTrainingEnabled !== false,
+      coursesEnabled: settings.coursesEnabled !== false,
       message: req.query.message
     });
   } catch (error) { next(error); }
@@ -56,13 +58,16 @@ exports.home = async (req, res, next) => {
 exports.courses = async (req, res, next) => {
   try {
     const settings = await getSiteSettings();
+    if (settings.coursesEnabled === false) return res.status(404).render('error', { message: 'This page is currently unavailable.' });
     res.render('courses', {
       title: 'IT Courses in Pune | Programming & CAD',
       description: 'Explore programming, data analytics, web development, software testing, and engineering design courses with Jay Dynamic Solutions in Pune.',
       canonical: `https://www.jdsolutionss.com${req.path}`,
       courses: courseCatalog,
       courseNames: courses,
-      satEnabled: settings.satEnabled,
+      satEnabled: settings.satEnabled !== false,
+      collegeTrainingEnabled: settings.collegeTrainingEnabled !== false,
+      coursesEnabled: settings.coursesEnabled !== false,
       message: req.query.message
     });
   } catch (error) { next(error); }
@@ -79,7 +84,9 @@ exports.careerAcceleration = async (req, res, next) => {
       internships,
       internshipNames: internships.map(item => item[0]),
       careerJobs: (settings.careerJobs || []).filter(job => job.isActive !== false),
-      satEnabled: settings.satEnabled,
+      satEnabled: settings.satEnabled !== false,
+      collegeTrainingEnabled: settings.collegeTrainingEnabled !== false,
+      coursesEnabled: settings.coursesEnabled !== false,
       message: req.query.message
     });
   } catch (error) { next(error); }
@@ -93,7 +100,9 @@ exports.internshipsPage = async (req, res, next) => {
       canonical: `https://www.jdsolutionss.com${req.path}`,
       internships,
       internshipNames: internships.map(item => item[0]),
-      satEnabled: settings.satEnabled,
+      satEnabled: settings.satEnabled !== false,
+      collegeTrainingEnabled: settings.collegeTrainingEnabled !== false,
+      coursesEnabled: settings.coursesEnabled !== false,
       message: req.query.message
     });
   } catch (error) { next(error); }
@@ -198,16 +207,31 @@ exports.page = (slug) => async (req, res, next) => {
   const page = sitePages[slug];
   try {
     const settings = await getSiteSettings();
-    res.render('page', { ...page, slug, satEnabled: settings.satEnabled, title: page.seoTitle, canonical: `https://www.jdsolutionss.com/${slug}`, message: req.query.message });
+    if (slug === 'college-training' && settings.collegeTrainingEnabled === false) {
+      return res.status(404).render('error', { message: 'This page is currently unavailable.' });
+    }
+    res.render('page', {
+      ...page,
+      slug,
+      satEnabled: settings.satEnabled !== false,
+      collegeTrainingEnabled: settings.collegeTrainingEnabled !== false,
+      coursesEnabled: settings.coursesEnabled !== false,
+      title: page.seoTitle,
+      canonical: `https://www.jdsolutionss.com/${slug}`,
+      message: req.query.message
+    });
   } catch (error) { next(error); }
 };
 exports.sitemap = async (req, res, next) => {
   try {
     const settings = await getSiteSettings();
     const urls = [
-      '/', '/services', '/courses', '/internships', '/career-acceleration',
-      '/corporate-training', '/college-training', '/about', '/contact',
-      ...(settings.satEnabled ? ['/jds-sat'] : []),
+      '/', '/services',
+      ...(settings.coursesEnabled !== false ? ['/courses'] : []),
+      '/internships', '/career-acceleration', '/corporate-training',
+      ...(settings.collegeTrainingEnabled !== false ? ['/college-training'] : []),
+      '/about', '/contact',
+      ...(settings.satEnabled !== false ? ['/jds-sat'] : []),
     ];
     const entries = urls.map((url) => `  <url><loc>https://www.jdsolutionss.com${url}</loc></url>`).join('\n');
     res.type('application/xml').set('Cache-Control', 'public, max-age=300').send(
@@ -224,7 +248,9 @@ exports.sat = async (req, res, next) => {
       description: 'Learn about the JDS-SAT scholarship aptitude test, eligibility, important dates, and available student opportunities from Jay Dynamic Solutions.',
       canonical: 'https://www.jdsolutionss.com/jds-sat',
       courses,
-      satEnabled: settings.satEnabled,
+      satEnabled: settings.satEnabled !== false,
+      collegeTrainingEnabled: settings.collegeTrainingEnabled !== false,
+      coursesEnabled: settings.coursesEnabled !== false,
       satCountdownEnabled: settings.satCountdownEnabled === true,
       satCountdownAt: settings.satCountdownAt ? new Date(settings.satCountdownAt).toISOString() : '',
       message: req.query.message
@@ -238,6 +264,8 @@ exports.adminDashboard = (req, res) => {
   res.render('admin', {
     title: 'Admin Dashboard', data: req.adminData, view, search: '',
     satEnabled: req.siteSettings?.satEnabled !== false,
+    collegeTrainingEnabled: req.siteSettings?.collegeTrainingEnabled !== false,
+    coursesEnabled: req.siteSettings?.coursesEnabled !== false,
     satCountdownEnabled: req.siteSettings?.satCountdownEnabled === true,
     satCountdownAt: req.siteSettings?.satCountdownAt || null,
     careerJobs: req.siteSettings?.careerJobs || [],

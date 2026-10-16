@@ -15,6 +15,8 @@ const siteSettingSchema = new mongoose.Schema({
   satEnabled: { type: Boolean, default: true },
   satCountdownEnabled: { type: Boolean, default: false },
   satCountdownAt: { type: Date, default: null },
+  collegeTrainingEnabled: { type: Boolean, default: true },
+  coursesEnabled: { type: Boolean, default: true },
   careerJobs: { type: [careerJobSchema], default: [] },
 }, { timestamps: true });
 

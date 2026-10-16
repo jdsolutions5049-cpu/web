@@ -3,6 +3,7 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const path = require('path');
 const mongoose = require('mongoose');
+const session = require('express-session');
 const MongoSessionStore = require('./middleware/mongoSessionStore');
 const { adminCsrfProtection } = require('./middleware/security');
 
@@ -81,9 +82,14 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: false, limit: '32kb' }));
 app.use(express.json({ limit: '32kb' }));
-const sessionMiddleware = require('express-session')({
+// Keep local development usable when Atlas DNS/network access is unavailable.
+// Production always uses the shared Mongo session store for durable sessions.
+const sessionStore = isProduction
+  ? new MongoSessionStore(mongoose)
+  : new session.MemoryStore();
+const sessionMiddleware = session({
   name: isProduction ? '__Host-jds.sid' : 'jds.sid',
-  store: new MongoSessionStore(mongoose),
+  store: sessionStore,
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,

@@ -22,8 +22,21 @@
     </form>
     <form class="sat-switch" action="/admin/settings/sat" method="post">
       <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <input type="hidden" name="returnView" value="<%= view %>">
       <div><span>JDS-SAT page</span><small><%= satEnabled ? 'Visible on website' : 'Currently hidden' %></small></div>
       <label class="switch"><input type="checkbox" name="satEnabled" <%= satEnabled ? 'checked' : '' %> data-auto-submit><span></span></label>
+    </form>
+    <form class="sat-switch" action="/admin/settings/courses" method="post">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <input type="hidden" name="returnView" value="<%= view %>">
+      <div><span>Courses page</span><small><%= coursesEnabled ? 'Visible on website' : 'Currently hidden' %></small></div>
+      <label class="switch"><input type="checkbox" name="coursesEnabled" <%= coursesEnabled ? 'checked' : '' %> data-auto-submit><span></span></label>
+    </form>
+    <form class="sat-switch" action="/admin/settings/college-training" method="post">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <input type="hidden" name="returnView" value="<%= view %>">
+      <div><span>College Workshops</span><small><%= collegeTrainingEnabled ? 'Visible on website' : 'Currently hidden' %></small></div>
+      <label class="switch"><input type="checkbox" name="collegeTrainingEnabled" <%= collegeTrainingEnabled ? 'checked' : '' %> data-auto-submit><span></span></label>
     </form>
   </aside>
 

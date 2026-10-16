@@ -32,7 +32,7 @@ exports.logout = (req, res, next) => req.session.destroy(error => {
 });
 
 exports.data = async (req, res, next) => {
-  const fallbackSettings = { satEnabled: true, satCountdownEnabled: false, satCountdownAt: null, careerJobs: [] };
+  const fallbackSettings = { satEnabled: true, satCountdownEnabled: false, satCountdownAt: null, collegeTrainingEnabled: true, coursesEnabled: true, careerJobs: [] };
   if (SiteSetting.db.readyState !== 1) {
     req.adminData = { enquiries: [], contacts: [] };
     req.siteSettings = fallbackSettings;
@@ -47,7 +47,7 @@ exports.data = async (req, res, next) => {
       SiteSetting.findOne({ key: 'main' }).lean(),
     ]);
     req.adminData = { enquiries, contacts };
-    req.siteSettings = siteSettings || { satEnabled: true, satCountdownEnabled: false, satCountdownAt: null, careerJobs: [] };
+    req.siteSettings = siteSettings || fallbackSettings;
     req.adminDatabaseAvailable = true;
     next();
   } catch (error) {
@@ -62,13 +62,15 @@ exports.data = async (req, res, next) => {
 
 exports.updateSatVisibility = async (req, res, next) => {
   try {
-    if (SiteSetting.db.readyState !== 1) return res.redirect('/admin?view=sat&error=Database+unavailable.+The+SAT+page+setting+was+not+saved.');
+    const returnView = req.body.returnView || (req.headers.referer && req.headers.referer.includes('view=') ? new URL(req.headers.referer, 'http://localhost').searchParams.get('view') : null);
+    const redirectUrl = returnView ? `/admin?view=${encodeURIComponent(returnView)}` : '/admin?view=sat';
+    if (SiteSetting.db.readyState !== 1) return res.redirect(`${redirectUrl}${redirectUrl.includes('?') ? '&' : '?'}error=Database+unavailable.+The+SAT+page+setting+was+not+saved.`);
     await SiteSetting.findOneAndUpdate(
       { key: 'main' },
       { $set: { satEnabled: req.body.satEnabled === 'on' } },
       { upsert: true, new: true, setDefaultsOnInsert: true }
     );
-    res.redirect('/admin?view=sat');
+    res.redirect(redirectUrl);
   } catch (error) { next(error); }
 };
 
@@ -95,6 +97,34 @@ exports.updateSatTimer = async (req, res, next) => {
       { upsert: true, new: true, setDefaultsOnInsert: true }
     );
     res.redirect('/admin?view=sat');
+  } catch (error) { next(error); }
+};
+
+exports.updateCollegeTrainingVisibility = async (req, res, next) => {
+  try {
+    const returnView = req.body.returnView || (req.headers.referer && req.headers.referer.includes('view=') ? new URL(req.headers.referer, 'http://localhost').searchParams.get('view') : null);
+    const redirectUrl = returnView ? `/admin?view=${encodeURIComponent(returnView)}` : '/admin?view=college';
+    if (SiteSetting.db.readyState !== 1) return res.redirect(`${redirectUrl}${redirectUrl.includes('?') ? '&' : '?'}error=Database+unavailable.+The+College+Workshops+page+setting+was+not+saved.`);
+    await SiteSetting.findOneAndUpdate(
+      { key: 'main' },
+      { $set: { collegeTrainingEnabled: req.body.collegeTrainingEnabled === 'on' } },
+      { upsert: true, new: true, setDefaultsOnInsert: true }
+    );
+    res.redirect(redirectUrl);
+  } catch (error) { next(error); }
+};
+
+exports.updateCoursesVisibility = async (req, res, next) => {
+  try {
+    const returnView = req.body.returnView || (req.headers.referer && req.headers.referer.includes('view=') ? new URL(req.headers.referer, 'http://localhost').searchParams.get('view') : null);
+    const redirectUrl = returnView ? `/admin?view=${encodeURIComponent(returnView)}` : '/admin?view=courses';
+    if (SiteSetting.db.readyState !== 1) return res.redirect(`${redirectUrl}${redirectUrl.includes('?') ? '&' : '?'}error=Database+unavailable.+The+Courses+page+setting+was+not+saved.`);
+    await SiteSetting.findOneAndUpdate(
+      { key: 'main' },
+      { $set: { coursesEnabled: req.body.coursesEnabled === 'on' } },
+      { upsert: true, new: true, setDefaultsOnInsert: true }
+    );
+    res.redirect(redirectUrl);
   } catch (error) { next(error); }
 };
 

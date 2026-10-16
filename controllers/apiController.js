@@ -13,6 +13,7 @@ exports.requireAdmin = (req, res, next) => {
 };
 exports.contact = async (req, res, next) => {
   try {
+    if (Contact.db.readyState !== 1) return res.status(503).json({ error: 'The database is unavailable. Please try again shortly.' });
     const contact = {
       name: typeof req.body.name === 'string' ? req.body.name.trim().slice(0, 120) : '',
       email: typeof req.body.email === 'string' ? req.body.email.trim().toLowerCase().slice(0, 254) : '',
@@ -27,6 +28,7 @@ exports.contact = async (req, res, next) => {
 };
 exports.enquiry = async (req, res, next) => {
   try {
+    if (Enquiry.db.readyState !== 1) return res.status(503).json({ error: 'The database is unavailable. Please try again shortly.' });
     const text = (key, maxLength) => typeof req.body[key] === 'string' ? req.body[key].trim().slice(0, maxLength) : '';
     const email = text('email', 254).toLowerCase();
     const phone = text('phone', 32).replace(/\D/g, '').slice(0, 15);
